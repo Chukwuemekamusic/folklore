@@ -1,0 +1,21 @@
+/* body {
+    ...
+} */
+
+header {
+    background-color: rgb(172, 193, 158);
+    padding: 20px;
+    text-align: center;
+}
+
+nav  ."navbar navbar-expand-lg bg-body-tertiary"{
+    background-color: rgb(14, 147, 147) ;
+}
+
+.hero {
+    justify-content: center;
+}
+
+.footer {
+    position: absolute;
+}
