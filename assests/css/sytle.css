@@ -8,7 +8,7 @@ header {
     text-align: center;
 }
 
-nav  ."navbar navbar-expand-lg bg-body-tertiary"{
+nav  .navbar navbar-expand-lg bg-body-tertiary{
     background-color: rgb(14, 147, 147) ;
 }
 
@@ -16,6 +16,20 @@ nav  ."navbar navbar-expand-lg bg-body-tertiary"{
     justify-content: center;
 }
 
-.footer {
+/* .footer {
     position: absolute;
+} */
+
+.hero {
+    background-image: url(/folklore/assests/img/hero-image2.jpg);
+    background-size: cover;
+    background-position: center;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 0 5px #000;
 }
