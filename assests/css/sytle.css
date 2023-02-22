@@ -21,15 +21,28 @@ nav  .navbar navbar-expand-lg bg-body-tertiary{
 } */
 
 .hero {
-    background-image: url(/folklore/assests/img/hero-image2.jpg);
-    background-size: cover;
+    /* background-image: url(/folklore/assests/img/hero-image2.jpg); */ 
+    /* background-size: cover; */
     background-position: center;
-    height: 500px;
-    display: flex;
-    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    /* display: flex; */
+    /* flex-direction: column; */
     justify-content: center;
     align-items: center;
-    text-align: center;
-    color: #fff;
-    text-shadow: 0 0 5px #000;
+    text-align: center; 
+    /* color: #fff;
+    text-shadow: 0 0 5px #000; */
+}
+
+.caro{
+   width: 960px;
+   height: 500px;
+   justify-content: center;
+}
+
+.caro-img {
+    width: 960px;
+    height: 500px;
+    
 }
