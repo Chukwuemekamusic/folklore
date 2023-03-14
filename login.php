@@ -14,10 +14,11 @@
         $password = $_POST['password'];
 
         // Prepare the SQL statement using a named parameter
-        $stmt = $db->prepare("SELECT uid FROM users WHERE username=:username");
+        $stmt = $db->prepare("SELECT uid FROM users WHERE username=:username AND password= :password");
 
         // Bind the username parameter to the prepared statement
         $stmt->bindParam(":username", $username);
+        $stmt->bindParam(":password", $password);
 
         // Execute the prepared statement
         $stmt->execute();
@@ -29,6 +30,7 @@
         if(mysqli_num_rows($result) == 1) 
         {
             echo 'good boy';
+            header('location: index.html');
         }
         else 
         {

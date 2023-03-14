@@ -1,15 +1,22 @@
 <?php 
-$servername = 'lamp-database';
-$dbname = 'docker';
+$servername = "lamp-mysql8";
+$dbname = 'folktales';
 $username = 'root';
 $password = 'tiger';
 
-$db =  new mysqli($servername, $username, $password, $dbname);
+// $conn =  new mysqli($servername, $username, $password, $dbname);
 
-if ($db->connect_error) {
-    die("Connection failed: " . $db->connect_error);
+// if ($conn->connect_error) {
+//     die("Connection failed: " . $db->connect_error);
+// }
+
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
 }
-
-echo 'success';
+// echo "Connected successfully";
 
 ?>
