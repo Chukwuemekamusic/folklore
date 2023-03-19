@@ -109,7 +109,7 @@ ob_end_flush();
     <div class="container py-5 ">
         <!-- <div class=$oldTags = $story['tags'];"row justify-content-center"> -->
             <!-- <div class="col-md-6 col-lg-5"> -->
-                <div class="card border-0 shadow">
+                <div class="card border-0 shadow p-3">
                     <h1 class="mt-5">Edit Story</h1>
                     <form method="POST">
                         <div class="form-group">
@@ -128,6 +128,7 @@ ob_end_flush();
                             <input type="submit" value="Save Changes" class="btn btn-primary">
                         </div>
                     </form>
+                   <a href="./storyteller_landing.php"><input type="button" value="CANCEL" class="btn btn-danger"></a>
                 </div>
             <!-- </div> -->
         <!-- </div> -->
