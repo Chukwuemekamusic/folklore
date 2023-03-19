@@ -25,9 +25,7 @@ CREATE TABLE continents (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
-  population BIGINT UNSIGNED NOT NULL,
-  area FLOAT UNSIGNED NOT NULL,
-  image_url VARCHAR(255) NOT NULL 
+  image_url VARCHAR(255) DEFAULT ""
 );
 
 CREATE TABLE storytellers (
@@ -39,6 +37,19 @@ CREATE TABLE storytellers (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ); 
+
+// combining storytellers and users table
+CREATE TABLE users (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(20) NOT NULL,
+    last_name VARCHAR(20) NOT NULL,
+    email VARCHAR(40) NOT NULL,
+    password VARCHAR(20) NOT NULL,
+    is_writer BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+); 
+
 // ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 // regions
@@ -85,6 +96,18 @@ CREATE TABLE story_ratings (
         FOREIGN KEY (user_id) REFERENCES users(id)
         ON DELETE CASCADE
 );
+
+CREATE TABLE story_comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    comment TEXT NOT NULL,
+    story_id INT NOT NULL,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (story_id) REFERENCES stories(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 
 
 

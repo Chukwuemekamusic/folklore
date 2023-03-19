@@ -5,12 +5,10 @@ include_once("./connection.php");
 # TODO adjust the story tellers
 // continents table
 $sql1 = "CREATE TABLE continents (
-    id INT(11) PRIMARY KEY AUTO_INCREMENT,
+    continent_id INT(11) PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
-    population BIGINT UNSIGNED NOT NULL,
-    area DECIMAL(10,2) UNSIGNED NOT NULL,
-    image_url VARCHAR(255) NOT NULL 
+    image_url VARCHAR(255) DEFAULT NULL 
 )";
 
 if (mysqli_query($conn, $sql1)) {
@@ -19,14 +17,15 @@ if (mysqli_query($conn, $sql1)) {
 } else {
     echo "Error creating continents table: " . mysqli_error($conn);
 }
+echo "<br>";
 
 // regions table
 $sql2 = "CREATE TABLE regions (
-    id INT(11) NOT NULL AUTO_INCREMENT,
+    region_id INT(11) NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     continent_id INT(11) NOT NULL,
-    PRIMARY KEY (id),
-    CONSTRAINT fk_regions_continent FOREIGN KEY (continent_id) REFERENCES continents(id)
+    PRIMARY KEY (region_id),
+    CONSTRAINT fk_regions_continents FOREIGN KEY (continent_id) REFERENCES continents(continent_id)
 
 )";
 
@@ -36,29 +35,30 @@ if (mysqli_query($conn, $sql2)) {
 } else {
     echo "Error creating regions table: " . mysqli_error($conn);
 }
+echo "<br>";
 
 // legends table
 $sql3 = "CREATE TABLE legends (
-    id INT(11)  AUTO_INCREMENT PRIMARY KEY,
+    legend_id INT(11)  AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT
-    
 )";
 
 if (mysqli_query($conn, $sql3)) {
     echo "Table legends created successfully ";
     
 } else {
-    echo "Error creating legnds table: " . mysqli_error($conn);
+    echo "Error creating legends table: " . mysqli_error($conn);
 }
+echo "<br>";
 
 // legend_region table
 $sql4 = "CREATE TABLE legend_region (
     legend_id INT(11) NOT NULL,
     region_id INT(11) NOT NULL,
     PRIMARY KEY (legend_id, region_id),
-    FOREIGN KEY (legend_id) REFERENCES legends(id) ON DELETE CASCADE,
-    FOREIGN KEY (region_id) REFERENCES regions(id) ON DELETE CASCADE
+    FOREIGN KEY (legend_id) REFERENCES legends(legend_id) ON DELETE CASCADE,
+    FOREIGN KEY (region_id) REFERENCES regions(region_id) ON DELETE CASCADE #TODO change regions(id) to regions(region_id)
 
 )";
 
@@ -68,6 +68,7 @@ if (mysqli_query($conn, $sql4)) {
 } else {
     echo "Error creating legend_region table: " . mysqli_error($conn);
 }
+echo "<br>";
 
 $sql5 = "CREATE TABLE users (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -77,14 +78,19 @@ $sql5 = "CREATE TABLE users (
     password VARCHAR(20) NOT NULL,
     is_writer BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    country VARCHAR(40),
+    gender ENUM('Male','Female','Other'),
+    dob DATE
 )";
 
-if (mysqli_query($conn, $sql4)) {
-    echo "Table storytellers created successfully";
+if (mysqli_query($conn, $sql5)) {
+    echo "Table users created successfully";
+    echo "<br>";
     
 } else {
     echo "Error creating storytellers table: " . mysqli_error($conn);
+    echo "<br>";
 }
 
 // stories table 
@@ -93,20 +99,21 @@ $sql6 = "CREATE TABLE stories (
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     content TEXT NOT NULL,
-    image_url VARCHAR(255) NOT NULL,
+    image_url VARCHAR(255) DEFAULT NULL,
     continent_id INT NOT NULL,
-    region_id INT,
+    legend_id INT DEFAULT NULL,
     author_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW() ON UPDATE NOW(),
-    CONSTRAINT fk_region
-        FOREIGN KEY (region_id) REFERENCES regions(id)
+    views INT DEFAULT 0,
+    CONSTRAINT fk_legend
+        FOREIGN KEY (legend_id) REFERENCES legends(legend_id)
         ON DELETE RESTRICT,
     CONSTRAINT fk_author
         FOREIGN KEY (author_id) REFERENCES users(id)
         ON DELETE RESTRICT,
     CONSTRAINT fk_continent
-        FOREIGN KEY (continent_id) REFERENCES continents(id)
+        FOREIGN KEY (continent_id) REFERENCES continents(continent_id)
         ON DELETE RESTRICT
 )";
 
@@ -116,7 +123,39 @@ if (mysqli_query($conn, $sql6)) {
 } else {
     echo "Error creating stories table: " . mysqli_error($conn);
 }
+echo "<br>";
 
+// tags table
+$sql7 = "CREATE TABLE tags (
+    tag_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL, 
+    description TEXT
+)";
+
+if (mysqli_query($conn, $sql7)) {
+    echo "Table tags created successfully";
+} else {
+    echo "Error creating tags table: " . mysqli_error($conn);
+}
+echo "<br>";
+
+// story_tag table
+$sql8 = "CREATE TABLE story_tag (
+    story_id INT(11) NOT NULL,
+    tag_id INT(11) NOT NULL,
+    PRIMARY KEY (story_id, tag_id),
+    FOREIGN KEY (story_id) REFERENCES stories(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags(tag_id) ON DELETE CASCADE
+
+)";
+
+if (mysqli_query($conn, $sql8)) {
+    echo "Table story_tag created successfully";
+    
+} else {
+    echo "Error creating story_tag table: " . mysqli_error($conn);
+}
+echo "<br>";
 
 mysqli_close($conn);
 ?>

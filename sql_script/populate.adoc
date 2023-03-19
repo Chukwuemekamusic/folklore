@@ -1,0 +1,53 @@
+= populate 
+
+== continents
+INSERT INTO continents (name, description) VALUES
+("Africa", "Known as the cradle of civilization, Africa is a continent steeped in ancient myths and legends. From the powerful deities of Egyptian mythology to the shape-shifting spirits of West African folklore, Africa's tales are as diverse as its people."),
+("Antarctica", "A land of ice and mystery, Antarctica is a continent like no other. With its starkly beautiful landscapes and harsh climate, it is a place where only the most intrepid explorers dare to venture. But beneath the surface of this frozen world, there are secrets waiting to be uncovered - stories of lost civilizations, hidden treasures, and ancient legends that have yet to be fully discovered."),
+("Australia", "A land of natural wonders and ancient tales, Australia is a continent of diverse landscapes and vibrant cultures. From the dreamtime stories of the indigenous peoples to the modern tales of adventure and discovery, Australia is a place where myths and legends come to life."),
+("Asia", "From the majestic mountains of the Himalayas to the bustling cities of Tokyo and Mumbai, Asia is a continent of contrasts. It is also home to some of the world's most enduring myths and legends, such as the ancient Chinese tale of the Monkey King and the Hindu epic, the Ramayana."),
+("Europe", "The birthplace of Western civilization, Europe has a rich history of myth and legend. From the heroic exploits of Greek gods and heroes to the mystical legends of Arthurian England, Europe's myths and legends have inspired artists and storytellers for centuries."),
+("North America", "From the thundering waterfalls of Niagara to the barren deserts of the Southwest, North America is a land of diverse landscapes and cultures. It is also home to a rich tradition of myths and legends, from the shape-shifting tricksters of Native American folklore to the chilling ghost stories of colonial New England."),
+("South America", "From the ancient ruins of Machu Picchu to the vibrant streets of Rio de Janeiro, South America is a continent of incredible diversity and beauty. Its myths and legends reflect this diversity, ranging from the shape-shifting spirits of the Amazon rainforest to the epic tales of the Inca Empire.")
+
+== legends
+INSERT INTO legends(name, description) VALUES
+('Greek Myths', 'Explore the world of Greek gods, heroes, and monsters through these captivating tales from ancient mythology.'),
+('Norse Legends', 'Discover the stories of the mighty gods, fierce warriors, and fantastical creatures of Norse mythology.'),
+('African Folktales', 'Journey through the rich cultural heritage of Africa with these vibrant tales passed down from generation to generation.'),
+('Asian Ghost Stories', 'Experience the spine-chilling thrill of Asian ghost stories, filled with vengeful spirits, haunted places, and ancient curses.'),
+('South American Myths', 'Delve into the mystical world of South American mythology, featuring powerful deities, legendary heroes, and magical creatures.'),
+('Roman Mythology', 'Discover the captivating tales of Roman mythology, filled with powerful gods and goddesses, epic battles, and thrilling adventures that will transport you to ancient times.')
+
+== procedures
+=== insert_tag 
+DELIMITER //
+CREATE PROCEDURE insert_tag(IN p_story_id INT, IN p_tag VARCHAR(255))
+BEGIN
+    -- First, check if the tag already exists in the tags table
+    DECLARE p_tag_id INT;
+    SELECT tag_id INTO p_tag_id FROM tags WHERE name = p_tag;
+    
+    -- If the tag does not exist, insert it into the tags table
+    IF p_tag_id IS NULL THEN
+        INSERT IGNORE INTO tags (name) VALUES (p_tag);
+        SET p_tag_id = LAST_INSERT_ID();
+    END IF;
+    
+    -- Insert the tag into the story_tags table if it does not exist
+    IF NOT EXISTS (SELECT * FROM story_tag WHERE story_id = p_story_id AND tag_id = p_tag_id) THEN
+        INSERT INTO story_tag (story_id, tag_id) VALUES (p_story_id, p_tag_id);
+    END IF;
+END //
+DELIMITER ;
+
+==== use case
+foreach ($tags as $tag) {
+    $stmt = $conn->prepare("CALL insert_tag(?, ?)");
+    $stmt->bind_param("is", $story_id, $tag);
+    $stmt->execute();
+    $stmt->close();
+}
+
+
+
