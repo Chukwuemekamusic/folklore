@@ -16,7 +16,8 @@ $legendID = htmlspecialchars($_POST["legend"]);
 $storyTitle = trim(htmlspecialchars($_POST['title']));
 $storyDescription = htmlspecialchars($_POST['description']);
 $storyContent = htmlspecialchars($_POST['content']);
-$tags = explode(',', $_POST["story-tags"]);
+// checks if tags are available before exploding
+$tags = isset($_POST["story-tags"]) ? explode(',', $_POST["story-tags"]) : [];
 
 $sql = "INSERT INTO stories (continent_id, legend_id, author_id, title, description, content) 
         VALUES (?, ?, ?, ?, ?, ?)";
@@ -47,13 +48,3 @@ $conn->close();
 ob_end_flush();
 ?>
 
-
-<!-- $stmt->close();
-  $sql1 = "SELECT id FROM stories WHERE title =? AND author_id=?";
-  $stmt = $conn->prepare($sql1);
-  if (!$stmt) {
-    echo "Error: ". $conn->error;
-    exit;
-  }
-  $stmt->bind_param("si", $storyTitle, $user_id);
-  if ($stmt); -->

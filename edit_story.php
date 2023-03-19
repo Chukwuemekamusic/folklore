@@ -19,7 +19,12 @@ if (isset($_GET["id"])) {
 }
 
 // Retrieve the current story details
-$sql = "SELECT * FROM stories WHERE id = ? AND author_id = ?";
+$sql = "SELECT stories.*, GROUP_CONCAT(tags.name) AS tags
+        FROM stories
+        LEFT JOIN story_tag ON stories.id = story_tag.story_id
+        LEFT JOIN tags ON story_tag.tag_id = tags.tag_id
+        WHERE stories.id =? AND stories.author_id =?
+        GROUP BY stories.id";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ii", $story_id, $user_id);
 $stmt->execute();
@@ -32,22 +37,49 @@ if ($result->num_rows == 0) {
 }
 
 $story = $result->fetch_assoc();
+// $oldTags = $story['tags'];
 
 // Update the story if the form has been submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $storyTitle = $_POST['title'];
-    $storyDescription = $_POST['description'];
-    $storyContent = $_POST['content'];
+    $storyTitle = htmlspecialchars($_POST['title']);
+    $storyDescription = htmlspecialchars($_POST['description']);
+    $storyContent = htmlspecialchars($_POST['content']);
+    $storyTags = isset($_POST["story-tags"]) ? explode(',', htmlspecialchars($_POST["story-tags"])) : [];
 
     $sql = "UPDATE stories SET title = ?, description = ?, content = ? WHERE id = ? AND author_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sssii", $storyTitle, $storyDescription, $storyContent, $story_id, $user_id);
 
     if ($stmt->execute()) {
-        header("Location: storyteller_landing.php");
-        exit();
-    } else {
+        //converting old tags to array
+        // $oldTags = array_map(function($tag) {
+        //     return $tag['tag'];
+        // }, $oldTags);
+
+        // //sort the tags
+        // sort($storyTags); sort($oldTags);
+
+        //compare the 2;
+        if ($storyTags) { 
+            // Delete existing tags for the story
+            $sql = "DELETE FROM story_tag WHERE story_id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $story_id);
+            $stmt->execute();
+            $stmt->close();
+          
+            // Insert the new tags into the database
+            $insertStmt = $conn->prepare("CALL insert_tag(?, ?)");
+            foreach ($storyTags as $tag) {
+              $insertStmt->bind_param("is", $story_id, trim($tag));
+              $insertStmt->execute();
+            }
+            $insertStmt->close();
+            header("Location: storyteller_landing.php");
+            exit();
+        } else {
         echo "Error: " . $stmt->error;
+        }
     }
 }
 
@@ -74,8 +106,8 @@ ob_end_flush();
 </head>
 
 <body>
-    <div class="container py-5 px-5">
-        <!-- <div class="row justify-content-center"> -->
+    <div class="container py-5 ">
+        <!-- <div class=$oldTags = $story['tags'];"row justify-content-center"> -->
             <!-- <div class="col-md-6 col-lg-5"> -->
                 <div class="card border-0 shadow">
                     <h1 class="mt-5">Edit Story</h1>
@@ -89,6 +121,9 @@ ob_end_flush();
 
                             <label for="content">Content:</label>
                             <textarea name="content" class="form-control" required><?php echo $story['content']; ?></textarea><br>
+                            <label for="tags">Tags:</label>
+                            <input type="text" class="form-control" name="story-tags" value="<?php echo $story['tags']; ?>"><br>
+
 
                             <input type="submit" value="Save Changes" class="btn btn-primary">
                         </div>
