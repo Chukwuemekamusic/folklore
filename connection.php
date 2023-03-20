@@ -1,4 +1,9 @@
 <?php 
+// $servername = "lamp-mysql8";
+// $dbname = 'folktales';
+// $username = 'root';
+// $password = 'tiger';
+
 $servername = "lamp-mysql8";
 $dbname = 'folktales';
 $username = 'root';
