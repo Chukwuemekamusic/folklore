@@ -38,7 +38,7 @@ session_start();
 
             $_SESSION['user'] = true;
             $_SESSION['first_name'] = $row['first_name'];
-            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['user_id'] = $row['id']; //
             header('location: storyteller_landing.php');
         }
         else 

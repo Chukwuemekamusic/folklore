@@ -19,14 +19,41 @@ $storyContent = htmlspecialchars($_POST['content']);
 // checks if tags are available before exploding
 $tags = isset($_POST["story-tags"]) ? explode(',', $_POST["story-tags"]) : [];
 
-$sql = "INSERT INTO stories (continent_id, legend_id, author_id, title, description, content) 
-        VALUES (?, ?, ?, ?, ?, ?)";
+//Process and upload the image
+$storyImage = $_FILES['image'] ?? null;
+$imagePath = '';
+
+if (!is_dir('./images')) {
+  if (mkdir('images', 511)){
+    echo "successful";
+  }else {
+    echo "Error: " . $conn->error;
+    
+  }
+  
+}
+
+if ($storyImage && $storyImage['tmp_name']) {
+  if ($storyImage['error'] === 0) {
+    $imagePath = 'images/'.randomStr().'/'.$storyImage['name'];
+    mkdir(dirname($imagePath));
+    move_uploaded_file($storyImage['tmp_name'], $imagePath);
+  }
+
+}
+// else {
+//   echo 'no image available';
+// }
+
+
+$sql = "INSERT INTO stories (continent_id, legend_id, author_id, title, description, content, image_url) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
     echo "Error: " . $conn->error;
     exit;
 }
-$stmt->bind_param("iiisss", $continentID, $legendID, $user_id, $storyTitle ,$storyDescription, $storyContent);
+$stmt->bind_param("iiissss", $continentID, $legendID, $user_id, $storyTitle ,$storyDescription, $storyContent, $imagePath);
 if ($stmt->execute()) {
   // retrieve the story_id
   $story_id = $conn->insert_id;
@@ -41,6 +68,16 @@ if ($stmt->execute()) {
   header('Location: storyteller_landing.php');
 } else {
   echo "Error: " . $stmt->error;
+}
+
+function randomStr($n=8) {        //Stephen watkins https://stackoverflow.com/questions/4356289/php-random-string-generator
+  $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $n; $i++) {
+        $randomString .= $characters[random_int(0, $charactersLength - 1)];
+    }
+    return $randomString;
 }
 
 $stmt->close();

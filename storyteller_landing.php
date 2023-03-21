@@ -33,10 +33,10 @@ include('connection.php');
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="#">My Stories</a>
+          <a class="nav-link active" href="storyteller_landing.php">My Stories</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">New Story</a>
+          <a class="nav-link" href="add_story.php">New Story</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Edit Profile</a>
@@ -66,15 +66,18 @@ include('connection.php');
         $story_id = $row['id'];  #TODO change to story_id
         $title = $row['title'];
         $views = $row['views'];
+        $imagePath = $row['image_url'];
       ?>
+        
         <li class="list-group-item">
-          <a href="view_story.php?story_id=<?php echo $story_id; ?>"><?php echo $title; ?></a>
+          <a href="view_story2.php?story_id=<?php echo $story_id; ?>"><?php echo $title; ?></a> 
           <div class="btn-group float-right" role="group">
             <a href="edit_story.php?id=<?php echo $story_id ?>" class="btn btn-primary mr-3">Edit</a>
             <a href="delete_story.php?id=<?php echo $story_id ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this story?')">Delete</a>
-            <!-- #TODO give a warning message before deleting -->
+          
           </div>
           <div class="float-right mr-4 badge badge-primary badge-pill">Views: <?php echo $views; ?></div>
+         
         </li>
       <?php } ?>
     </ul>
