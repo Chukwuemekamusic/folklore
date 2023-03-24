@@ -4,17 +4,17 @@ ob_start();
 include_once('connection.php');
 
 // Check if the user is logged in
-if (!isset($_SESSION["user_id"]))  {
-    header("Location: login.php");
-    exit();
-}
+// if (!isset($_SESSION["admin"]))  {
+//     header("Location: login.php");
+//     exit();
+// }
 
-$user_id = $_SESSION["user_id"];
+// $admin_id = $_SESSION["admin_id"] ?? '';
 
 if (isset($_GET["id"])) {
     $story_id = $_GET["id"];
 } else {
-    header("Location: storyteller_landing.php");
+    header("Location: admin_landing.php");
     exit();
 }
 
@@ -23,16 +23,16 @@ $sql = "SELECT stories.*, GROUP_CONCAT(tags.name) AS tags
         FROM stories
         LEFT JOIN story_tag ON stories.id = story_tag.story_id
         LEFT JOIN tags ON story_tag.tag_id = tags.tag_id
-        WHERE stories.id =? AND stories.author_id =?
+        WHERE stories.id =? 
         GROUP BY stories.id";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ii", $story_id, $user_id);
+$stmt->bind_param("i", $story_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows == 0) {
     // Story does not exist or does not belong to the logged in user
-    header("Location: storyteller_landing.php");
+    header("Location: admin_landing.php");
     exit();
 }
 
@@ -46,9 +46,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $storyContent = htmlspecialchars($_POST['content']);
     $storyTags = isset($_POST["story-tags"]) ? explode(',', htmlspecialchars($_POST["story-tags"])) : [];
 
-    $sql = "UPDATE stories SET title = ?, description = ?, content = ? WHERE id = ? AND author_id = ?";
+    $sql = "UPDATE stories SET title = ?, description = ?, content = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssii", $storyTitle, $storyDescription, $storyContent, $story_id, $user_id);
+    $stmt->bind_param("sssi", $storyTitle, $storyDescription, $storyContent, $story_id);
 
     if ($stmt->execute()) {
 
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               $insertStmt->execute();
             }
             $insertStmt->close();
-            header("Location: storyteller_landing.php");
+            header("Location: admin_landing.php");
             exit();
         } else {
         echo "Error: " . $stmt->error;
@@ -88,7 +88,7 @@ ob_end_flush();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Story - Storyteller</title>
+    <title>Edit Story - Admin</title>
     <!-- include your CSS and JS files here -->
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -114,20 +114,21 @@ ob_end_flush();
 
                             <label for="content">Content:</label>
                             <textarea name="content" class="form-control" rows="10" required><?php echo $story['content']; ?></textarea><br>
-
+                            
                             <label for="story-tags">Tags (maximum of 3):</label>
                             <input type="text" class="form-control" id="story-tags" name="story-tags" value="<?php echo $story['tags']; ?>"><br>
-                            <small class="text-muted">Separate tags with commas</small><br>
-                     
+                            <small class="text-muted">Separate tags with commas</small> <br>
+
+
                             <input type="submit" value="Save Changes" class="btn btn-primary">
                         </div>
                     </form>
-                   <a href="./storyteller_landing.php"><input type="button" value="CANCEL" class="btn btn-danger"></a>
+                   <a href="./admin_landing.php"><input type="button" value="CANCEL" class="btn btn-danger"></a>
                 </div>
             <!-- </div> -->
         <!-- </div> -->
 </div>
- <!-- jQuery -->
+    <!-- jQuery -->
   <!-- <script src="./tutorial/js/jquery-3.5.1.min.js"></script> -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- personal script  -->

@@ -27,8 +27,7 @@ if (!is_dir('./images')) {
   if (mkdir('images', 511)){
     echo "successful";
   }else {
-    echo "Error: " . $conn->error;
-    
+    echo "Error: " . $conn->error;    
   }
   
 }
@@ -84,4 +83,3 @@ $stmt->close();
 $conn->close();
 ob_end_flush();
 ?>
-

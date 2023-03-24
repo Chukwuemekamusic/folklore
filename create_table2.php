@@ -157,6 +157,30 @@ if (mysqli_query($conn, $sql8)) {
 }
 echo "<br>";
 
+
+// story_tag table
+$sql9 = "CREATE TABLE admin (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    first_name VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)";
+
+if (mysqli_query($conn, $sql9)) {
+    echo "Table story_tag created successfully";
+    
+} else {
+    echo "Error creating story_tag table: " . mysqli_error($conn);
+}
+echo "<br>";
+
+
+
+
+  
+
 mysqli_close($conn);
 ?>
 

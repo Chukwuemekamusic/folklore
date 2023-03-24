@@ -121,6 +121,7 @@ if (!isset($_SESSION["user_id"])) {
         <!-- Submit button -->
         <button type="submit" class="btn btn-primary">Submit Story</button>
     </form>
+    <a href="storyteller_landing.php"><button type='button' class='btn btn-danger'>CANCEL</button></a>
   </div>
 
   <!-- jQuery -->
