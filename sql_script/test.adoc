@@ -1,0 +1,8 @@
+= Web Tests
+=== Search
+* Ensured that search does the following:
+ gets all continent related stories
+ gets all legend category related stories
+ gets all tag related stories
+ gets DISTINCT stories and avoids repeating the same story more once
+* 

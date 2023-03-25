@@ -24,15 +24,21 @@ $categories = get_user_details('*', 'legends');
     <div class="container py-5">
         <h1 class="mb-4">Multilevel Dropdown</h1>
         <div class="dropdown">
-            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"> Menu </a>
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                Menu 
+            </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <li><a class="dropdown-item" href="#">Action</a></li>
                 <li class="dropdown dropend">
-                    <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Multilevel Action 1</a>
+                    <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Multilevel Action 1
+                    </a>
                     <ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
                         <li><a class="dropdown-item" href="#">Action</a></li>
                         <li class="dropdown dropend">
-                            <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Multilevel Action 2</a>
+                            <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Multilevel Action 2
+                            </a>
                             <ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu2">
                                 <li><a class="dropdown-item" href="#">Action</a></li>
                                 <li><a class="dropdown-item" href="#">Another action</a></li>

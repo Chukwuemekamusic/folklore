@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once('connection.php');
 include_once('functions.php');
 $categories = get_user_details('*', 'legends');
@@ -69,15 +70,35 @@ $continents = get_user_details('*', 'continents');
               <li><a class="dropdown-item" href="./all_stories.php">All Stories</a></li>
             </ul>
           </li>
+          </li>
+          <?php if (isset($_SESSION['user_id'])) { ?>
+            <li class="nav-item"><a href="storyteller_landing.php" class="nav-link">Storyteller</a></li>
+          <?php } elseif (isset($_SESSION['admin_id'])) { ?>
+            <li class="nav-item"><a href="admin_dashboard.php" class="nav-link">Admin</a></li>
+          <?php } ?>
           <!-- <li class="nav-item"><a href="#" class="nav-link">Explore Stories</a></li> -->
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Login/Sign-up
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="login.html">Storyteller</a>
-              <a class="dropdown-item" href="admin_login.html">Admin</a>
-            </div>
+            <?php if (isset($_SESSION['user_id']) || isset($_SESSION['admin_id'])) { ?>
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Logout
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <?php if (isset($_SESSION['user_id'])) { ?>
+                  <a class="dropdown-item" href="logout.php">Storyteller</a>
+                <?php } ?>
+                <?php if (isset($_SESSION['admin_id'])) { ?>
+                  <a class="dropdown-item" href="logout.php">Admin</a>
+                <?php } ?>
+              </div>
+            <?php } else { ?>
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Login/Sign-up
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="login.html">Storyteller</a>
+                <a class="dropdown-item" href="admin_login.html">Admin</a>
+              </div>
+            <?php } ?>
           </li>
           <li class="nav-item">
             <form class="form-inline ml-auto flex-nowrap" method="POST" action="search_stories.php">

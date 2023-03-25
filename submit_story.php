@@ -29,20 +29,27 @@ if (!is_dir('./images')) {
   }else {
     echo "Error: " . $conn->error;    
   }
-  
 }
+$allowedTypes = array("jpg", "jpeg", "png", "gif"); #TODO ensure that upload image are of a type
 
 if ($storyImage && $storyImage['tmp_name']) {
   if ($storyImage['error'] === 0) {
-    $imagePath = 'images/'.randomStr().'/'.$storyImage['name'];
-    mkdir(dirname($imagePath));
-    move_uploaded_file($storyImage['tmp_name'], $imagePath);
+    $storyExt = strtolower(end(explode('.',$storyImage['name'])));
+    
+    if (in_array($storyExt, $allowedTypes)){
+      $imagePath = 'images/'.randomStr().'/'.$storyImage['name'];
+      mkdir(dirname($imagePath));
+      move_uploaded_file($storyImage['tmp_name'], $imagePath);
+    } else {
+      Echo 'Wrong file extension format';
+    }
+
+  }else {
+    Echo 'Error uploading Image!';
   }
 
 }
-// else {
-//   echo 'no image available';
-// }
+
 
 
 $sql = "INSERT INTO stories (continent_id, legend_id, author_id, title, description, content, image_url) 

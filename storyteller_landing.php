@@ -42,7 +42,7 @@ include('connection.php');
           <a class="nav-link" href="#">Edit Profile</a>
         </li>
         <li class="nav-item font-weight-bold">
-          <a class="nav-link" href="./webpage.html">Home</a>
+          <a class="nav-link" href="./index.php">Home</a>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
@@ -76,7 +76,7 @@ include('connection.php');
             <a href="delete_story.php?id=<?php echo $story_id ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this story?')">Delete</a>
           
           </div>
-          <div class="float-right mr-4 badge badge-primary badge-pill">Views: <?php echo $views; ?></div>
+          <div class="float-right mr-4 badge-md badge-info badge-pill">Views: <?php echo $views; ?></div>
          
         </li>
       <?php } ?>

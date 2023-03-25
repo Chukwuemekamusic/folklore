@@ -20,8 +20,8 @@ include('connection.php');
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">My Website</a>
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
+        <a class="navbar-brand" href="#">Admin</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -38,6 +38,9 @@ include('connection.php');
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Settings</a>
+                </li>
+                <li class="nav-item font-weight-bold">
+                    <a class="nav-link" href="./index.php">Home</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">

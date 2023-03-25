@@ -1,8 +1,9 @@
 <?php
+session_start();
 include('./connection.php');
 include_once('./functions.php');
-$stories = get_user_details('*', 'stories');
-$search_query = $_POST['search-input'] ?? '';
+$categories = get_user_details('*', 'legends');
+$stories = get_user_details('*', 'stories', '', 'views DESC');
 
 ?>
 <!DOCTYPE html>
@@ -22,84 +23,107 @@ $search_query = $_POST['search-input'] ?? '';
 </head>
 
 <body>
-<header>
-    <!-- Top-bar -->
-
-    <!-- End Top Bar -->
-
-    <!-- Navigation -->
-    <nav class="navbar bg-light navbar-light navbar-expand-lg">
-      <div class="container">
-        <a href="" class="navbar-brand">logo</a>
-      </div>
-
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div id="navbarResponsive" class="collapse navbar-collapse">
-        <ul class="navbar-nav">
-          <li class="nav-item"><a href="index.php" class="nav-link active">Home</a></li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-              Explore
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <li class="dropdown dropend">
-                <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  By Category
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
-                  <?php
-                  foreach ($categories as $category) { ?>
-                    <li><a class="dropdown-item" href="legend_stories.php?category_id=<?php echo $category['legend_id'] ?>"><?php echo $category['name'] ?></a></li>
-                  <?php } ?>
-                </ul>
-              </li>
-              <li class="dropdown dropend">
-                <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  By Continent
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
-                  <?php
-                  foreach ($continents as $continent) { ?>
-                    <li><a class="dropdown-item" href="legend_stories.php?continent_id=<?php echo $continent['continent_id'] ?>"><?php echo $continent['name'] ?></a></li>
-                  <?php } ?>
-                </ul>
-              </li>
-              <li><a class="dropdown-item" href="./all_stories.php">All Stories</a></li>
-            </ul>
-          </li>
-          <li class="nav-item"><a href="#" class="nav-link">Explore Stories</a></li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Login/Sign-up
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="login.html">Storyteller</a>
-              <a class="dropdown-item" href="admin_login.html">Admin</a>
+    <header>
+        <!-- Navigation -->
+        <nav class="navbar bg-light navbar-light navbar-expand-lg">
+            <div class="container">
+                <a href="" class="navbar-brand">logo</a>
             </div>
-          </li>
-          <!-- <li class="nav-item"><a href="#" class="nav-link">My Stories</a></li> -->
-        </ul>
-      </div>
-    </nav>
-    <!-- End Navigation -->
-    <div class="py-5 bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h1 class="text-blue">Our Stories</h1>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="navbarResponsive" class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a href="index.php" class="nav-link">Home</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            Explore
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li class="dropdown dropend">
+                                <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    By Category
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+                                    <?php
+                                    foreach ($categories as $category) { ?>
+                                        <li><a class="dropdown-item" href="legend_stories.php?category_id=<?php echo $category['legend_id'] ?>"><?php echo $category['name'] ?></a></li>
+                                    <?php } ?>
+                                </ul>
+                            </li>
+                            <li class="dropdown dropend">
+                                <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    By Continent
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+                                    <?php
+                                    foreach ($continents as $continent) { ?>
+                                        <li><a class="dropdown-item" href="legend_stories.php?continent_id=<?php echo $continent['continent_id'] ?>"><?php echo $continent['name'] ?></a></li>
+                                    <?php } ?>
+                                </ul>
+                            </li>
+                            <li><a class="dropdown-item" href="./all_stories.php">All Stories</a></li>
+                        </ul>
+                    </li>
+                    </li>
+                    <?php if (isset($_SESSION['user_id'])) { ?>
+                        <li class="nav-item"><a href="storyteller_landing.php" class="nav-link">Storyteller</a></li>
+                    <?php } elseif (isset($_SESSION['admin_id'])) { ?>
+                        <li class="nav-item"><a href="admin_dashboard.php" class="nav-link">Admin</a></li>
+                    <?php } ?>
+                    <!-- <li class="nav-item"><a href="#" class="nav-link">Explore Stories</a></li> -->
+                    <li class="nav-item dropdown">
+                        <?php if (isset($_SESSION['user_id']) || isset($_SESSION['admin_id'])) { ?>
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Logout
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <?php if (isset($_SESSION['user_id'])) { ?>
+                                    <a class="dropdown-item" href="logout.php">Storyteller</a>
+                                <?php } ?>
+                                <?php if (isset($_SESSION['admin_id'])) { ?>
+                                    <a class="dropdown-item" href="logout.php">Admin</a>
+                                <?php } ?>
+                            </div>
+                        <?php } else { ?>
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Login/Sign-up
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="login.html">Storyteller</a>
+                                <a class="dropdown-item" href="admin_login.html">Admin</a>
+                            </div>
+                        <?php } ?>
+                    </li>
+                    <li class="nav-item">
+                        <form class="form-inline ml-auto flex-nowrap" method="POST" action="search_stories.php">
+                            <input class="form-control mr-sm-2" id="search-input" name="search-input" type="search" placeholder="Search for stories" aria-label="Search">
+                            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                    </li>
+                    <!-- <li class="nav-item"><a href="#" class="nav-link">My Stories</a></li> -->
+                </ul>
             </div>
-        </div>
-        <!-- <div class="row">
+        </nav>
+        <!-- End Navigation -->
+
+        <div class="py-5 bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h1 class="text-blue">Our Stories</h1>
+                    </div>
+                </div>
+                <!-- <div class="row">
             <div class="justify-center">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55613426.91722162!2d-146.38331045098784!3d31.70567163459902!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x52b30b71698e729d%3A0x131328839761a382!2sNorth%20America!5e0!3m2!1sen!2suk!4v1679740468036!5m2!1sen!2suk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div> -->
-    </div>
-</div>
-  </header>
+            </div>
+        </div>
+    </header>
 
     <div class="container mt-5">
         <div class="row justify-content-center">
@@ -108,8 +132,8 @@ $search_query = $_POST['search-input'] ?? '';
                 <div class="col-md-12 mb-4">
                     <div class="card ">
                         <div class="card-header">
-                            <a href="view_story2.php?story_id=<?php echo $story['id'];?>">
-                            <h2 class="mb-0"><?php echo ucfirst($story['title']); ?></h2>
+                            <a href="view_story2.php?story_id=<?php echo $story['id']; ?>">
+                                <h2 class="mb-0"><?php echo ucfirst($story['title']); ?></h2>
                             </a>
                         </div>
                         <div class="card-body">
@@ -128,14 +152,7 @@ $search_query = $_POST['search-input'] ?? '';
     </div>
     <!-- Script Source Files -->
 
-    <!-- jQuery -->
-    <script src="./assets/js/jquery-3.5.1.min.js"></script>
-    <!-- Bootstrap 4.5 JS -->
-    <script src="./assets/js/bootstrap.min.js"></script>
-    <!-- Popper JS -->
-    <script src="./assets/js/popper.min.js"></script>
-    <!-- Font Awesome -->
-    <script src="./assets/js/all.min.js"></script>
+    <?php include_once('./footer.php'); ?>
 
     <!-- End Script Source Files -->
 </body>
