@@ -61,14 +61,17 @@ $popular_stories = get_popular_stories(5);
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Logout</a>
+                    <a class="nav-link" href="logout.php">Logout</a>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <div class="container-lg mt-5 p-5">
-        <h1>Admin Dashboard</h1>
+    <div class="container-lg mt-4 p-5">
+        <div class="col text-center">
+            <h1>Admin Dashboard</h1>
+          <div class="border-top border-primary w-25 mx-auto my-3"></div>
+        </div>
         <div class="row mt-5">
             <div class="col-md-6">
                 <div class="card">

@@ -20,6 +20,8 @@ body {
 }
 
 
+
+
 /*============= NAVIGATION =============*/
 .navbar-brand img {
   height: 2.5rem;
@@ -29,7 +31,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.1rem;
   box-shadow: 0 .5rem .5rem rgba(0, 0, 0, .1);
-  z-index: 1;
+  z-index: 10000 !important;
 }
 
 .nav-item {
@@ -103,6 +105,19 @@ body {
   background-color: #4981b3;
   border: .05rem solid #4981b3;
 }
+
+
+.btn-outline-primary {
+    color: #4981b3;
+    border-color: #4981b3;
+}
+.btn-outline-primary:hover {
+    color: #fff;
+    background-color: #4981b3;
+    border-color: #4981b3;
+}
+
+
 .btn-primary:hover,
 .btn-primary:focus{
   background-color: #4981b3;
@@ -167,6 +182,43 @@ body {
 .featured-story a:hover {
   background-color: #0069d9;
 }
+
+/* ============ CARD IMG =========== */
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+
+/* ============ DROPDOWN ============= */
+.dropdown-menu {
+  position: fixed;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  font-size: 14px;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: 4px;
+  box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu.open {
+  z-index: 10000; /* adjust this value as needed */
+}
+
+
 
 
 

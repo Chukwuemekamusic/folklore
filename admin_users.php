@@ -27,13 +27,13 @@ include_once('functions.php');
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item ">
-                    <a class="nav-link active" href="admin_dashboard.php">Dashboard <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="admin_dashboard.php">Dashboard <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="./admin_landing.php">Stories</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./admin_users.php">Users</a>
+                    <a class="nav-link active" href="./admin_users.php">Users</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Settings</a>

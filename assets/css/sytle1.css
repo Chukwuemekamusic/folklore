@@ -8,10 +8,13 @@ header {
     text-align: center;
 }
 
-nav  ."navbar navbar-expand-lg bg-body-tertiary"{
+nav.navbar.navbar-expand-lg.bg-body-tertiary{
     background-color: rgb(14, 147, 147) ;
 }
 
+nav {
+    z-index: 1;
+}
 .hero {
     justify-content: center;
 }

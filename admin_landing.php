@@ -49,7 +49,10 @@ include('connection.php');
     </nav>
 
     <div class="container-lg mt-4 p-5">
-        <h1 class="mb-4">All Stories on the Site</h1>
+        <div class="col text-center">
+            <h1 class="mb-4">All Stories on the Site</h1>
+            <div class="border-top border-primary w-25 mx-auto my-3"></div>
+        </div>
         <form method="get">
             <div class="form-row align-items-center">
                 <div class="col-auto my-1">
@@ -123,7 +126,7 @@ include('connection.php');
                             <th scope="row"><?php echo $i + 1 ?></th>
                             <td><?php echo $story_id ?></td>
                             <a href=""></a>
-                            <td><a href="view_story2.php?story_id=<?php echo $story_id;?>"><?php echo $title ?></a></td>
+                            <td><a href="view_story2.php?story_id=<?php echo $story_id; ?>"><?php echo $title ?></a></td>
                             <td><?php echo $views ?></td>
                             <td><?php echo $author_name ?></td>
                             <td><?php echo $legend ?></td>

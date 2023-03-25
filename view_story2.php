@@ -1,4 +1,5 @@
 <?php
+#TODO make this page for everyone
 include_once("connection.php");
 if (!isset($_GET['story_id'])) {
 	header("Location: storyteller_landing.php");
@@ -44,7 +45,7 @@ $story = $result->fetch_assoc();
 			height: auto;
 			margin-bottom: 10px;
 		} -->
-	</style>
+	<!-- </style> -->
 </head>
 
 <body>

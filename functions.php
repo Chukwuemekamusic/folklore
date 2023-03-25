@@ -99,8 +99,42 @@ function get_num_stories_by_storyteller($storyteller_id) {
       }
     }
   }
-  
 
+  // Search function for stories
+  function searchStories($search_query) {
+    global $conn;
+    // prepare SQL statement
+    $sql = "SELECT stories.*, legends.name AS legend_name, continents.name AS continent_name
+            FROM stories
+            LEFT JOIN legends ON stories.legend_id = legends.legend_id
+            LEFT JOIN continents ON stories.continent_id = continents.continent_id
+            WHERE stories.title LIKE ?
+            OR stories.description LIKE ?
+            OR stories.content LIKE ?
+            OR legends.name LIKE ?
+            OR continents.name LIKE ?
+            ORDER BY stories.created_at DESC";
+  
+    // prepare statement
+    $stmt = mysqli_prepare($conn, $sql);
+  
+    // bind parameters
+    $search_query = "%{$search_query}%";
+    mysqli_stmt_bind_param($stmt, "sssss", $search_query, $search_query, $search_query, $search_query, $search_query);
+  
+    // execute statement
+    if (mysqli_stmt_execute($stmt)) {
+     
+        $result = mysqli_stmt_get_result($stmt);  
+        mysqli_stmt_close($stmt);
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+        
+    } else {
+      echo "Error: " . $conn->error;
+      return null; 
+  }    
+    // mysqli_close($conn); 
+  }
 
 ?>
 
