@@ -168,7 +168,7 @@ function update_story_views($story_id) //only updates views when the viewer is n
             $is_authorized = false;
         }
     }
-    if (!$is_authorized) {
+    if (!$is_authorized or isset($_SESSION['admin'])) {
         // && !isset($_SESSION['admin'])
         return;
     }

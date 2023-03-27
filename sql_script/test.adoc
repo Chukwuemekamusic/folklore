@@ -1,8 +1,27 @@
-= Web Tests
-=== Search
-* Ensured that search does the following:
- gets all continent related stories
- gets all legend category related stories
- gets all tag related stories
- gets DISTINCT stories and avoids repeating the same story more once
-* 
+= Test Cases =
+== Story Search ==
+
+Test Case 1: Enter a keyword in the search box and verify that the correct stories are displayed.
+Test Case 2: Enter an invalid keyword and verify that no stories are displayed.
+== Story Upload ==
+
+Test Case 1: Upload a valid image and verify that it is displayed correctly in the story.
+Test Case 2: Upload an invalid image and verify that the user is notified of the error.
+Test Case 3: Attempt to upload a file that exceeds the maximum size and verify that the user is notified of the error.
+== Story Editing ==
+
+Test Case 1: Edit an existing story and verify that the changes are saved correctly.
+Test Case 2: Replace the image attachment in an existing story and verify that the new image is displayed correctly.
+== User Authentication ==
+
+Test Case 1: Create a new user account and verify that the credentials are stored correctly.
+Test Case 2: Login with valid credentials and verify that the user is redirected to the correct page.
+Test Case 3: Attempt to login with invalid credentials and verify that the user is notified of the error.
+== Administrator Functionality ==
+
+Test Case 1: Login as an administrator and verify that the correct pages and functions are accessible.
+Test Case 2: Delete a story and verify that it is removed from the database.
+Test Case 3: Review and manage all stories on the system and verify that they are displayed correctly.
+Test Case 4: Review system information such as the number of stories and storytellers, number of stories published in the last week and month.
+Test Case 5: Change the homepage featured stories.
+Test Case 6: Add a new category, and edit image of existing categories.

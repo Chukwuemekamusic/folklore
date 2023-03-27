@@ -5,32 +5,32 @@ include_once('./functions.php');
 $categories = get_user_details('*', 'legends');
 $continents = get_user_details('*', 'continents');
 
-foreach ($categories as $category) {
-  switch ($category['name']) {
-      case 'Greek Myths':
-          $greekId = $category['legend_id'];
-          break;
-      case 'Norse Legends':
-          $norseId = $category['legend_id'];
-          break;
-      case 'African Folktales':
-          $africanId = $category['legend_id'];
-          break;
-      case 'Asian Ghost Stories':
-          $asianId = $category['legend_id'];
-          break;
-      case 'South American Myths':
-          $southAmericanId = $category['legend_id'];
-          break;
-      case 'Roman Mythology':
-          $romanId = $category['legend_id'];
-          break;
-      default:
-          // handle the case when the category name doesn't match any of the expected values
-          break;
-  }
+// foreach ($categories as $category) {
+//   switch ($category['name']) {
+//       case 'Greek Myths':
+//           $greekId = $category['legend_id'];
+//           break;
+//       case 'Norse Legends':
+//           $norseId = $category['legend_id'];
+//           break;
+//       case 'African Folktales':
+//           $africanId = $category['legend_id'];
+//           break;
+//       case 'Asian Ghost Stories':
+//           $asianId = $category['legend_id'];
+//           break;
+//       case 'South American Myths':
+//           $southAmericanId = $category['legend_id'];
+//           break;
+//       case 'Roman Mythology':
+//           $romanId = $category['legend_id'];
+//           break;
+//       default:
+//           // handle the case when the category name doesn't match any of the expected values
+//           break;
+//   }
  
-}
+// }
 
 ?>
 <!DOCTYPE html>
