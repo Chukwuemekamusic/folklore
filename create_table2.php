@@ -158,7 +158,7 @@ if (mysqli_query($conn, $sql8)) {
 echo "<br>";
 
 
-// story_tag table
+// admin table
 $sql9 = "CREATE TABLE admin (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -169,17 +169,31 @@ $sql9 = "CREATE TABLE admin (
 )";
 
 if (mysqli_query($conn, $sql9)) {
-    echo "Table story_tag created successfully";
+    echo "Table Admin created successfully";
     
 } else {
-    echo "Error creating story_tag table: " . mysqli_error($conn);
+    echo "Error creating Admin table: " . mysqli_error($conn);
 }
 echo "<br>";
 
+// homepage_stories table
+$sql10 = "CREATE TABLE homepage_stories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    story_id INT NOT NULL,
+    position INT NOT NULL,
+    CONSTRAINT fk_homepage_stories_story_id FOREIGN KEY (story_id) REFERENCES stories(id),
+    CONSTRAINT uc_homepage_stories UNIQUE (position),
+    -- CONSTRAINT chk_homepage_stories_position CHECK (position BETWEEN 1 AND 6)
+  )";
 
+if (mysqli_query($conn, $sql10)) {
+    echo "Table homepage_stories created successfully";
+    
+} else {
+    echo "Error creating homepage_stories table: " . mysqli_error($conn);
+}
+echo "<br>";
 
-
-  
 
 mysqli_close($conn);
 ?>

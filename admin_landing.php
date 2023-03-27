@@ -1,7 +1,50 @@
 <?php
 session_start();
+if (!isset($_SESSION['admin_id'])) {
+    header('Location: index.php');
+    exit;
+}
 
-include('connection.php');
+include('./connection.php');
+include('./functions.php');
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // get form data
+    $story_id = mysqli_real_escape_string($conn, $_POST['story_id']);
+    $position = mysqli_real_escape_string($conn, $_POST['position']);
+
+    // check that story ID exists in stories table
+    $sql = "SELECT id FROM stories WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $story_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if (
+        $result->num_rows == 0
+    ) {
+        echo 'id does not exist';
+    } else {
+        $stmt->close();
+        $sql = "INSERT INTO homepage_stories(story_id, position) VALUES (?,?) ON DUPLICATE KEY UPDATE story_id= ?";
+
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            echo "Error: " . $conn->error;
+            exit;
+        }
+        // Bind the email parameter to the prepared statement
+        $stmt->bind_param("iii", $story_id, $position, $story_id);
+
+
+        if ($stmt->execute()) {
+            header("Location: admin_landing.php");
+            exit();
+        } else {
+            echo "Error: " . $conn->error;
+            return null;
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +80,7 @@ include('connection.php');
                     <a class="nav-link" href="./admin_users.php">Users</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Settings</a>
+                    <a class="nav-link" href="./settings.php">Settings</a>
                 </li>
                 <li class="nav-item font-weight-bold">
                     <a class="nav-link" href="./index.php">Home</a>
@@ -45,7 +88,7 @@ include('connection.php');
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Logout</a>
+                    <a class="nav-link" href="./logout.php">Logout</a>
                 </li>
             </ul>
         </div>
@@ -101,7 +144,6 @@ include('connection.php');
                         <th scope="col" data-sortable>#</th>
                         <th scope="col" data-sortable>Story id</th>
                         <th scope="col" data-sortable>Title</th>
-                        <!-- <th scope="col" data-sortable>Description</th> -->
                         <th scope="col" data-sortable>Views</th>
                         <th scope="col" data-sortable>Storyteller</th>
                         <th scope="col" data-sortable>Category/Legend</th>
@@ -151,34 +193,68 @@ include('connection.php');
                 <a href="add_story.php" class="btn btn-primary">Add New Story</a>
             </div>
     </div>
+    <div class="container-lg mt-4">
+        <div class="col text-center">
+            <h2 class="mb-4">All Stories on Homepage</h2>
+            <div class="border-top border-primary w-25 mx-auto my-3"></div>
+        </div>
+        <h4>Update Homepage Stories</h4>
+        <form method="post">
+            <label for="story_id">Story ID:</label>
+            <input type="text" name="story_id"><br><br>
+            <label for="position">Position:</label>
+            <input type="text" name="position"><br>
+            <input type="submit" value="Update">
+        </form>
+    </div>
+    <ul class="list-group">
+        <?php
+        $homepageStories = getHomepageStories();
+        ?>
+        <table class="table table-striped mb-5">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Story id</th>
+                    <th>Title</th>
+                    <th>Views</th>
+                    <th>Storyteller</th>
+                    <th>Category/Legend</th>
+                    <th>Continent</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $i = 0;
+                foreach ($homepageStories as $row) {
+                    $story_id = $row['id'];
+                    $title = $row['title'];
+                    $views = $row['views'];
+                    $author_firstname = ucfirst($row['first_name']);
+                    $author_lastname = ucfirst($row['last_name']);
+                    $author_name = "{$author_firstname} {$author_lastname}";
+                    $legend = $row['legend_name'];
+                    $continent = $row['continent'];
+                ?>
 
-    <!-- Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT"></script>
+                    <tr>
+                        <th scope="row"><?php echo $i + 1 ?></th>
+                        <td><?php echo $story_id ?></td>
+                        <a href=""></a>
+                        <td><a href="view_story2.php?story_id=<?php echo $story_id; ?>"><?php echo $title ?></a></td>
+                        <td><?php echo $views ?></td>
+                        <td><?php echo $author_name ?></td>
+                        <td><?php echo $legend ?></td>
+                        <td><?php echo $continent ?></td>
+                    </tr>
+                <?php $i++;
+                } ?>
+            </tbody>
+        </table>
+
+        <!-- Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT"></script>
 </body>
 
 </html>;
-
-<!-- $sort_by = $_GET['sort-by'];
-switch ($sort_by) {
-  case 'author-name':
-    $sql = "SELECT s.*, u.firstname, u.lastname FROM stories s JOIN users u ON s.author_id = u.id ORDER BY u.lastname, u.firstname";
-    break;
-  case 'category':
-    $sql = "SELECT s.*, c.name as category_name FROM stories s JOIN categories c ON s -->
-
-<!-- 
-    <form method="get" action="">
-            <div class="form-row align-items-center">
-                <div class="col-auto">
-                    <label class="sr-only" for="sort-by">Sort by</label>
-                    <select class="form-control mb-2" id="sort-by" name="sort-by">
-                        <option value="author-name" <?php if ($_GET['sort-by'] == 'author-name') echo 'selected'; ?>>Author name</option>
-                        <option value="category" <?php if ($_GET['sort-by'] == 'category') echo 'selected'; ?>>Category</option>
-                    </select>
-                </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-primary mb-2">Sort</button>
-                </div>
-            </div>
-        </form> -->

@@ -2,7 +2,7 @@
 session_start();
 include_once('connection.php');
 // Check if the user is logged in
-if (!isset($_SESSION["user_id"])) {
+if (!isset($_SESSION["user_id"]) || !isset($_SESSION['admin'])) {
   header("Location: login.php");
   exit();
 } ?>
@@ -17,7 +17,7 @@ if (!isset($_SESSION["user_id"])) {
   <title>Add Story</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-  <link rel="stylesheet" href="./tutorial/css/style.css">
+  <link rel="stylesheet" href="./assets/css/style.css">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap" rel="stylesheet">
 
@@ -125,16 +125,16 @@ if (!isset($_SESSION["user_id"])) {
   </div>
 
   <!-- jQuery -->
-  <!-- <script src="./tutorial/js/jquery-3.5.1.min.js"></script> -->
+  <!-- <script src="./assets/js/jquery-3.5.1.min.js"></script> -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- personal script  -->
-  <script src="./assests/js/sign.js"></script>
+  <script src="./assets/js/sign.js"></script>
   <!-- Bootstrap 4.5 JS -->
-  <script src="./tutorial/js/bootstrap.min.js"></script>
+  <script src="./assets/js/bootstrap.min.js"></script>
   <!-- Popper JS -->
-  <script src="./tutorial/js/popper.min.js"></script>
+  <script src="./assets/js/popper.min.js"></script>
   <!-- Font Awesome -->
-  <script src="./tutorial/js/all.min.js"></script>
+  <script src="./assets/js/all.min.js"></script>
 </body>
 
 </html>

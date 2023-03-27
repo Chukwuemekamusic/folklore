@@ -1,9 +1,37 @@
 <?php
 session_start();
-include_once('connection.php');
-include_once('functions.php');
+include_once('./connection.php');
+include_once('./functions.php');
 $categories = get_user_details('*', 'legends');
 $continents = get_user_details('*', 'continents');
+
+foreach ($categories as $category) {
+  switch ($category['name']) {
+      case 'Greek Myths':
+          $greekId = $category['legend_id'];
+          break;
+      case 'Norse Legends':
+          $norseId = $category['legend_id'];
+          break;
+      case 'African Folktales':
+          $africanId = $category['legend_id'];
+          break;
+      case 'Asian Ghost Stories':
+          $asianId = $category['legend_id'];
+          break;
+      case 'South American Myths':
+          $southAmericanId = $category['legend_id'];
+          break;
+      case 'Roman Mythology':
+          $romanId = $category['legend_id'];
+          break;
+      default:
+          // handle the case when the category name doesn't match any of the expected values
+          break;
+  }
+ 
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,10 +51,6 @@ $continents = get_user_details('*', 'continents');
 
 <body>
   <header>
-    <!-- Top-bar -->
-
-    <!-- End Top Bar -->
-
     <!-- Navigation -->
     <nav class="navbar bg-light navbar-light navbar-expand-lg">
       <div class="container">
@@ -106,7 +130,6 @@ $continents = get_user_details('*', 'continents');
               <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
             </form>
           </li>
-          <!-- <li class="nav-item"><a href="#" class="nav-link">My Stories</a></li> -->
         </ul>
       </div>
     </nav>
@@ -171,68 +194,23 @@ $continents = get_user_details('*', 'continents');
     </div>
   </div>
   <div class="row">
+    <?php 
+    $homepageStories = getHomepageStories();
+    // print_r($homepageStory);
+    // exit;
+    foreach($homepageStories as $homepageStory) {?>
     <div class="col-md-4 mb-4">
       <div class="card h-100 featured-story">
-        <img src="./assets/img/epic-gilgamesh.jpg" class="card-img-top w-100" alt="Featured Story" style="height: 300px;">
+        <img src="<?php echo $homepageStory['image_url'] ?>" class="card-img-top w-100" alt="Featured Story" style="height: 300px;">
         <div class="card-body">
-          <h5 class="card-title">The Epic of Gilgamesh</h5>
-          <p class="card-text">Follow the adventures of the legendary king Gilgamesh as he embarks on a journey to discover the secrets of immortality.</p>
-          <a href="#" class="btn btn-primary">Read More</a>
+          <h5 class="card-title"><?php echo $homepageStory['title'] ?></h5>
+          <p class="card-text"><?php echo $homepageStory['description'] ?></p>
+          <a href="view_story2.php?story_id=<?php echo $homepageStory['id']; ?>" class="btn btn-primary">Read More</a>
         </div>
       </div>
     </div>
-    <div class="col-md-4 mb-4">
-      <div class="card h-100 featured-story">
-        <img src="./assets/img/Odyssey.jpg" class="card-img-top w-100" alt="Featured Story 2" style="height: 300px;">
-        <div class="card-body">
-          <h5 class="card-title">The Odyssey</h5>
-          <p class="card-text">Join the hero Odysseus as he battles monsters, outwits gods, and struggles to find his way home after the Trojan War.</p>
-          <a href="#" class="btn btn-primary">Read More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4 mb-4">
-      <div class="card h-100 featured-story">
-        <img src="./assets/img/baba_yaga.jpg" class="card-img-top w-100" alt="Featured Story 3" style="height: 300px;">
-        <div class="card-body">
-          <h5 class="card-title">Baba Yaga</h5>
-          <p class="card-text">Discover the strange and magical world of Slavic folklore with the story of Baba Yaga, the infamous witch who lives in a house that walks on chicken legs. Follow the brave and resourceful Vasilisa as she journeys to Baba Yaga's hut to seek her help, but beware: Baba Yaga is known for her unpredictable and dangerous ways.</p>
-          <a href="#" class="btn btn-primary">Read More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="./assets/img/Charlemagne.jpg" class="card-img-top w-100" alt="Featured Story 4" style="height: 300px;">
-        <div class="card-body">
-          <h5 class="card-title">Charlemagne </h5>
-          <p class="card-text">Charlemagne (known also as Charles the Great, as well as Charles I) was a King of the Franks, the first ruler of the Holy Roman Empire (though the term 'Holy Roman Empire' would only be coined after Charlemagne's death), and one of the most important figures in the history of early Medieval Europe.</p>
-          <a href="#" class="btn btn-primary">Read More</a>
-        </div>
-      </div>
-    </div>
-    <!-- # TODO  adding of 2 more card -->
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="./assets/img/Ivan.jpg" class="card-img-top w-100" alt="Featured Story 5" style="height: 300px;">
-        <div class="card-body">
-          <h5 class="card-title">Ivan Tsarevich, the Firebird, and the Grey Wolf</h5>
-          <p class="card-text">Description of the fourth featured story goes here.</p>
-          <a href="#" class="btn btn-block">Read More</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="./assets/img/Nibelungs.jpg" class="card-img-top w-100" alt="Featured Story 6" style="height: 300px;">
-        <div class="card-body">
-          <h5 class="card-title">The Nibelungenlied</h5>
-          <p class="card-text">Enter the world of Germanic mythology and adventure with the story of the Nibelungenlied, a medieval epic that tells the tale of the dragon-slaying hero Siegfried and his doomed love for the beautiful Kriemhild. Filled with knights, dragons, and treachery, this story is a classic of the genre.</p>
-          <a href="#" class="btn btn-block">Read More</a>
-        </div>
-      </div>
-    </div>
+    <?php } ?>
+    
     <!-- add more col-md-->
   </div>
 
@@ -249,76 +227,29 @@ $continents = get_user_details('*', 'continents');
           <div class="border-top border-primary w-25 mx-auto my-3"></div>
         </div>
       </div>
+      
       <div class="row">
-        <div class="col-md-4 mb-4">
+      <?php foreach($categories as $i=>$category) {
+            if ($i%3 == 0 && $i != 0){?>
+            </div>
+     
+            <div class="row">
+            <?php } ?>
+            <div class="col-md-4 mb-4">
           <div class="card h-100">
-            <img src="./assets/img/Zeus.jpg" class="card-img-top" alt="Greek Myths">
+            <img src="<?php echo $category['image_url'] ?? ''?>" class="card-img-top" alt="Greek Myths">
             <div class="card-body">
-              <a href="">
-                <h5 class="card-title">Greek Myths</h5>
+              <a href="legend_stories.php?category_id=<?php echo $category['legend_id']?>">
+                <h5 class="card-title"><?php echo $category['name']?></h5>
               </a>
-              <p class="card-text">Explore the world of Greek gods, heroes, and monsters through these captivating tales from ancient mythology.</p>
+              <p class="card-text"><?php echo $category['description']?></p>
             </div>
           </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <img src="./assets/img/norse2.jpg" class="card-img-top" alt="Norse Legends">
-            <div class="card-body">
-              <a href="#">
-                <h5 class="card-title">Norse Legends</h5>
-              </a>
-              <p class="card-text">Discover the stories of the mighty gods, fierce warriors, and fantastical creatures of Norse mythology.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <img src="./assets/img/yoruba3.jpg" class="card-img-top" alt="African Folktales">
-            <div class="card-body">
-              <a href="">
-                <h5 class="card-title">African Folktales</h5>
-              </a>
-              <p class="card-text">Journey through the rich cultural heritage of Africa with these vibrant tales passed down from generation to generation.</p>
-            </div>
-          </div>
-        </div>
+        </div>                
+      <?php } ?>
       </div>
-      <div class="row">
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <img src="./assets/img/asian.png" class="card-img-top" alt="Asian Ghost Stories">
-            <div class="card-body">
-              <a href="">
-                <h5 class="card-title">Asian Ghost Stories</h5>
-              </a>
-              <p class="card-text">Experience the spine-chilling thrill of Asian ghost stories, filled with vengeful spirits, haunted places, and ancient curses.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <img src="./assets/img/inca.jpg" class="card-img-top" alt="South American Myths">
-            <div class="card-body">
-              <a href="">
-                <h5 class="card-title">South American Myths</h5>
-              </a>
-              <p class="card-text">Delve into the mystical world of South American mythology, featuring powerful deities, legendary heroes, and magical creatures.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <img src="./assets/img/rome.jpg" class="card-img-top" alt="South American Myths">
-            <div class="card-body">
-              <a href="">
-                <h5 class="card-title">Roman Mythology</h5>
-              </a>
-              <p class="card-text">Discover the captivating tales of Roman mythology, filled with powerful gods and goddesses, epic battles, and thrilling adventures that will transport you to ancient times.</p>
-            </div>
-          </div>
-        </div>
-      </div>
+     
+      
     </div>
   </section>
   <!-- End of Popular Stories -->

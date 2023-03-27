@@ -2,6 +2,9 @@
 session_start();
 ob_start();
 include_once('connection.php');
+if (!$_SESSION['admin_id']) {
+    header('Location: index.php');
+}
 
 // Check if the user is logged in
 // if (!isset($_SESSION["admin"]))  {

@@ -152,7 +152,7 @@ function update_story_views($story_id) //only updates views when the viewer is n
 {
     global $conn;
 
-    
+
     $is_authorized = true;
     // Check if the user is the author of the story
     if (isset($_SESSION['user_id'])) {
@@ -168,7 +168,7 @@ function update_story_views($story_id) //only updates views when the viewer is n
             $is_authorized = false;
         }
     }
-    if (!$is_authorized ) {  
+    if (!$is_authorized) {
         // && !isset($_SESSION['admin'])
         return;
     }
@@ -181,48 +181,110 @@ function update_story_views($story_id) //only updates views when the viewer is n
 }
 
 // create random string no
-function randomStr($n=8) {        //Stephen watkins https://stackoverflow.com/questions/4356289/php-random-string-generator
+function randomStr($n = 8)
+{        //Stephen watkins https://stackoverflow.com/questions/4356289/php-random-string-generator
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      $charactersLength = strlen($characters);
-      $randomString = '';
-      for ($i = 0; $i < $n; $i++) {
-          $randomString .= $characters[random_int(0, $charactersLength - 1)];
-      }
-      return $randomString;
-  }
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $n; $i++) {
+        $randomString .= $characters[random_int(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
 
 // handle upload image
-function handle_image_upload($image, $current_image_path = '') {
+function handle_image_upload($image, $current_image_path = '')
+{
     global $conn;
     $imagePath = '';
-  
+    $max_size = 2 * 1024 * 1024; // 2 MB in bytes
+    // create directory if not present
     if (!is_dir('./images')) {
-      if (mkdir('images', 511)){
-        echo "successful creation of image folder! <br>";
-      } else {
-        echo "Error: " . $conn->error;
-      }
-    }
-    $allowedTypes = array("jpg", "jpeg", "png", "gif");
-  
-    if ($image && $image['tmp_name']) {
-      if ($image['error'] === 0) {
-        $imageExt = strtolower(end(explode('.', $image['name'])));
-        
-        if (in_array($imageExt, $allowedTypes)){
-          $imagePath = 'images/'.randomStr().'/'.$image['name'];
-          mkdir(dirname($imagePath));
-          move_uploaded_file($image['tmp_name'], $imagePath);
+        if (mkdir('images', 511)) {
+            echo "successful creation of image folder! <br>";
         } else {
-          echo 'Wrong file extension format!!! <br>';
+            echo "directory 'images' is not created! <br> 
+        Manually create a directory 'images' in your current work folder and try again!!";
+            exit;
         }
-      } else {
-        echo 'Error uploading Image!';
-      }
+    }
+
+    $allowedTypes = array("jpg", "jpeg", "png", "gif");
+
+    if ($image && $image['tmp_name']) {
+        if ($image['error'] === 0) {
+            $imageNameParts = explode('.', $image['name']);
+            $imageExt = strtolower(end($imageNameParts));
+
+
+            if (in_array($imageExt, $allowedTypes)) {
+                if ($image['size'] < $max_size) {
+                    $imagePath = 'images/' . randomStr() . '/' . $image['name'];
+                    mkdir(dirname($imagePath));
+                    move_uploaded_file($image['tmp_name'], $imagePath);
+                } else {
+                    echo 'File too large!!! <br>';
+                    exit;
+                }
+            } else {
+                echo 'Wrong file extension format!!! <br>';
+                exit;
+            }
+        } else {
+            echo 'Error uploading Image!';
+            exit;
+        }
     } else {
         // If the file input is empty, return the current image URL
         $imagePath = $current_image_path;
-      }
-  
+    }
+
     return $imagePath;
-  }
+}
+
+function getHomepageStories()
+{
+    global $conn;
+    $sql = "SELECT stories.*, users.first_name, users.last_name, legends.name AS legend_name, continents.name AS continent, homepage_stories.position 
+            FROM stories 
+            JOIN users ON stories.author_id = users.id 
+            JOIN legends ON stories.legend_id = legends.legend_id 
+            JOIN continents ON stories.continent_id = continents.continent_id 
+            JOIN homepage_stories ON stories.id = homepage_stories.story_id 
+            WHERE homepage_stories.position <= 6 
+            ORDER BY homepage_stories.position ASC ";
+
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        // handle the error
+        echo 'statement failed!!!';
+        echo "Error: " . $conn->error;
+        return null;
+    } else {
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            echo "Error: " . $conn->error;
+            return null;
+        }
+    }
+}
+
+function edit_category($id, $name, $description, $image = null) {
+    global $conn;
+    $image_path = null;
+
+    if ($image) {
+        $image_path = handle_image_upload($image);
+    }
+
+    $sql = "UPDATE legends SET name=?, description=?, image_url=? WHERE legend_id=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssi", $name, $description, $image_path, $id);
+    $result = $stmt->execute();
+    $stmt->close();
+
+    return $result;
+}
+

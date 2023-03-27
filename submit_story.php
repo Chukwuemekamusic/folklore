@@ -18,6 +18,7 @@ $storyDescription = htmlspecialchars($_POST['description']);
 $storyContent = htmlspecialchars($_POST['content']);
 // checks if tags are available before exploding
 $tags = isset($_POST["story-tags"]) ? explode(',', $_POST["story-tags"]) : [];
+$max_size = 2 * 1024 * 1024; // 2 MB in bytes
 
 //Process and upload the image
 $storyImage = $_FILES['image'] ?? null;
@@ -34,14 +35,25 @@ $allowedTypes = array("jpg", "jpeg", "png", "gif"); #TODO ensure that upload ima
 
 if ($storyImage && $storyImage['tmp_name']) {
   if ($storyImage['error'] === 0) {
-    $storyExt = strtolower(end(explode('.',$storyImage['name'])));
+    $storyImageNameParts = explode('.', $storyImage['name']);
+    $storyExt = strtolower(end($storyImageNameParts));
     
     if (in_array($storyExt, $allowedTypes)){
-      $imagePath = 'images/'.randomStr().'/'.$storyImage['name'];
-      mkdir(dirname($imagePath));
-      move_uploaded_file($storyImage['tmp_name'], $imagePath);
+      
+      if ($storyImage['size'] < $max_size) {
+
+        $imagePath = 'images/'.randomStr().'/'.$storyImage['name'];
+        mkdir(dirname($imagePath));
+        move_uploaded_file($storyImage['tmp_name'], $imagePath);
+
+      } else {
+        echo 'Error: Image size exceeds maximum allowed size of 2MB.';
+        exit;
+      }
+
     } else {
       Echo 'Wrong file extension format';
+      exit;
     }
 
   }else {

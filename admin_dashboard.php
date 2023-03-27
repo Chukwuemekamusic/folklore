@@ -3,6 +3,7 @@ include_once('connection.php');
 session_start();
 if (!isset($_SESSION['admin'])) {
     header("Location: index.php");
+    exit;
 }
 include_once('functions.php');
 
@@ -38,7 +39,7 @@ $popular_stories = get_popular_stories(5);
 </head>
 
 <body>
-    <!-- Navbar -->
+    <!-- Navbar starts-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Admin</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +57,7 @@ $popular_stories = get_popular_stories(5);
                     <a class="nav-link" href="./admin_users.php">Users</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Settings</a>
+                    <a class="nav-link" href="settings.php">Settings</a>
                 </li>
                 <li class="nav-item font-weight-bold">
                     <a class="nav-link" href="./index.php">Home</a>
@@ -69,6 +70,7 @@ $popular_stories = get_popular_stories(5);
             </ul>
         </div>
     </nav>
+    <!-- Navbar ends -->
 
     <div class="container-lg mt-4 p-5">
         <div class="col text-center">
@@ -121,17 +123,40 @@ $popular_stories = get_popular_stories(5);
                     <div class="card-body">
                         <h5 class="card-title">Most Popular Stories</h5>
                         <div class="card-text">
-                            <ul>
-                                <?php foreach ($popular_stories as $story) { ?>
-                                    <li> <?php echo $story['title']; ?> (Views: <?php echo $story['views']; ?>)</li>
-                                <?php } ?>
+                            <table>
+                                <thead>
+                                    <tr>
+
+                                        <th scope="col" data-sortable>Story id</th>
+                                        <th scope="col" data-sortable>Title</th>
+                                        <th scope="col" data-sortable>Views</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($popular_stories as $i => $story) { ?>
+                                        <tr>
+
+                                            <td><?php echo $story['id'] ?></td>
+                                            <a href=""></a>
+                                            <td><a href="view_story2.php?story_id=<?php echo $story['id']; ?>"><?php echo $story['title']; ?></a></td>
+                                            <td><?php echo $story['views']; ?></td>
+                                        </tr>
+                                    <?php } ?>
+
+                                </tbody>
+                            </table>
                         </div>
 
-                        </ul>
+
                     </div>
                 </div>
             </div>
         </div>
+
+    </div>
+    <!-- js scripts -->
+    <?php include_once('./footer.php'); ?>
 </body>
 
 </html>
