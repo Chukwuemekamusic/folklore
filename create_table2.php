@@ -25,7 +25,8 @@ $sql2 = "CREATE TABLE regions (
     name VARCHAR(255) NOT NULL,
     continent_id INT(11) NOT NULL,
     PRIMARY KEY (region_id),
-    CONSTRAINT fk_regions_continents FOREIGN KEY (continent_id) REFERENCES continents(continent_id)
+    CONSTRAINT fk_regions_continents FOREIGN KEY 
+    (continent_id) REFERENCES continents(continent_id)
 
 )";
 
@@ -58,8 +59,7 @@ $sql4 = "CREATE TABLE legend_region (
     region_id INT(11) NOT NULL,
     PRIMARY KEY (legend_id, region_id),
     FOREIGN KEY (legend_id) REFERENCES legends(legend_id) ON DELETE CASCADE,
-    FOREIGN KEY (region_id) REFERENCES regions(region_id) ON DELETE CASCADE #TODO change regions(id) to regions(region_id)
-
+    FOREIGN KEY (region_id) REFERENCES regions(region_id) ON DELETE CASCADE
 )";
 
 if (mysqli_query($conn, $sql4)) {
@@ -182,8 +182,8 @@ $sql10 = "CREATE TABLE homepage_stories (
     story_id INT NOT NULL,
     position INT NOT NULL,
     CONSTRAINT fk_homepage_stories_story_id FOREIGN KEY (story_id) REFERENCES stories(id),
-    CONSTRAINT uc_homepage_stories UNIQUE (position),
-    -- CONSTRAINT chk_homepage_stories_position CHECK (position BETWEEN 1 AND 6)
+    CONSTRAINT uc_homepage_stories UNIQUE (position)
+    -- ,CONSTRAINT chk_homepage_stories_position CHECK (position BETWEEN 1 AND 6)
   )";
 
 if (mysqli_query($conn, $sql10)) {

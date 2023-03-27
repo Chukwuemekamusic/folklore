@@ -1,42 +1,34 @@
+
 CREATE TABLE stories (
     id INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     content TEXT NOT NULL,
-    image_url VARCHAR(255) NOT NULL,
+    image_url VARCHAR(255) DEFAULT NULL,
     continent_id INT NOT NULL,
-    subregion_id INT,
-    storyteller_id INT NOT NULL,
+    legend_id INT DEFAULT NULL,
+    author_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW() ON UPDATE NOW(),
-    CONSTRAINT fk_sub_region
-        FOREIGN KEY (subregion_id) REFERENCES sub_regions(id)
+    views INT DEFAULT 0,
+    CONSTRAINT fk_legend
+        FOREIGN KEY (legend_id) REFERENCES legends(legend_id)
         ON DELETE RESTRICT,
-    CONSTRAINT fk_storyteller
-        FOREIGN KEY (storyteller_id) REFERENCES storytellers(id)
+    CONSTRAINT fk_author
+        FOREIGN KEY (author_id) REFERENCES users(id)
         ON DELETE RESTRICT,
     CONSTRAINT fk_continent
-        FOREIGN KEY (continent_id) REFERENCES continents(id)
+        FOREIGN KEY (continent_id) REFERENCES continents(continent_id)
         ON DELETE RESTRICT
 );
 
 
 CREATE TABLE continents (
-  id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(255) NOT NULL,
-  description TEXT NOT NULL,
-  image_url VARCHAR(255) DEFAULT ""
+  continent_id INT(11) PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    image_url VARCHAR(255) DEFAULT NULL 
 );
-
-CREATE TABLE storytellers (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(20) NOT NULL,
-    last_name VARCHAR(20) NOT NULL,
-    email VARCHAR(40) NOT NULL,
-    password VARCHAR(20) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-); 
 
 // combining storytellers and users table
 CREATE TABLE users (
@@ -47,36 +39,73 @@ CREATE TABLE users (
     password VARCHAR(20) NOT NULL,
     is_writer BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    country VARCHAR(40),
+    gender ENUM('Male','Female','Other'),
+    dob DATE
 ); 
 
-// ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 // regions
 CREATE TABLE regions (
-  id INT(11) NOT NULL AUTO_INCREMENT,
-  name VARCHAR(255) NOT NULL,
-  continent_id INT(11) NOT NULL,
-  PRIMARY KEY (id),
-  CONSTRAINT fk_regions_continent FOREIGN KEY (continent_id) REFERENCES continents(id)
+   region_id INT(11) NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    continent_id INT(11) NOT NULL,
+    PRIMARY KEY (region_id),
+    CONSTRAINT fk_regions_continents FOREIGN KEY 
+    (continent_id) REFERENCES continents(continent_id)
 )
 
 // -- Legends table
 CREATE TABLE legends (
-    id INT(11) NOT NULL AUTO_INCREMENT,
+     legend_id INT(11)  AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description TEXT,
-    PRIMARY KEY (id)
-) ENGINE=InnoDB;
+    description TEXT
+) 
 
 // -- Association table between legends and regions
 CREATE TABLE legend_region (
-  legend_id INT(11) NOT NULL,
-  region_id INT(11) NOT NULL,
-  PRIMARY KEY (legend_id, region_id),
-  FOREIGN KEY (legend_id) REFERENCES legends(id) ON DELETE CASCADE,
-  FOREIGN KEY (region_id) REFERENCES regions(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
+ legend_id INT(11) NOT NULL,
+    region_id INT(11) NOT NULL,
+    PRIMARY KEY (legend_id, region_id),
+    FOREIGN KEY (legend_id) REFERENCES legends(legend_id) ON DELETE CASCADE,
+    FOREIGN KEY (region_id) REFERENCES regions(region_id) ON DELETE CASCADE
+) 
+
+// tags table
+CREATE TABLE tags (
+    tag_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL, 
+    description TEXT
+)
+
+// story-tag table
+CREATE TABLE story_tag (
+    story_id INT(11) NOT NULL,
+    tag_id INT(11) NOT NULL,
+    PRIMARY KEY (story_id, tag_id),
+    FOREIGN KEY (story_id) REFERENCES stories(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags(tag_id) ON DELETE CASCADE
+)
+
+// admin table
+CREATE TABLE admin (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    first_name VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)
+
+// homepage_stories table
+CREATE TABLE homepage_stories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    story_id INT NOT NULL,
+    position INT NOT NULL,
+    CONSTRAINT fk_homepage_stories_story_id FOREIGN KEY (story_id) REFERENCES stories(id),
+    CONSTRAINT uc_homepage_stories UNIQUE (position)
+)
 
 // #TODO new tables to create and add to database_schema.adoc
 
