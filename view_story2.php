@@ -5,6 +5,7 @@ include_once('functions.php');
 $categories = get_user_details('*', 'legends');
 $continents = get_user_details('*', 'continents');
 
+$loggedIn = isLoggedIn();
 
 
 if (!isset($_GET['story_id'])) {
@@ -31,29 +32,19 @@ update_story_views($story_id);
   <title>View Story</title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="./tutorial/css/style.css">
+  <!-- rateyo star lib -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+  <!-- <link rel="stylesheet" type="text/css" href="jquery.rateyo.min.css">  -->
+  <!-- personal css lib -->
+  <link rel="stylesheet" href="./assets/css/style.css">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap" rel="stylesheet">
-  <!-- <style>
-		.card {
-			margin-top: 20px;
-			border-radius: 0;
-			box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-		}
-
-		.card-header {
-			background-color: #f8f9fa;
-			border-bottom: 1px solid #dee2e6;
-			padding: 10px 15px;
-			font-weight: bold;
-		}
-
-		.card-body img {
-			max-width: 100%;
-			height: auto;
-			margin-bottom: 10px;
-		} -->
-  <!-- </style> -->
+  <!-- jQuery -->
+  <script src="./assets/js/jquery-3.5.1.min.js"></script>
+  <!-- Bootstrap 4.5 JS -->
+  <script src="./assets/js/bootstrap.min.js"></script>
+  <!-- jquery rateYo -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
 </head>
 
 <body>
@@ -160,16 +151,103 @@ update_story_views($story_id);
         </div>
       </div>
     </div>
+
+    <form class="form-group">
+
+      <div class="rateyo" id="rating" 
+      data-rateyo-rating="4" data-rateyo-num-stars="5" 
+      data-rateyo-score="3">
+      </div>
+
+      <!-- Show a login modal when the user clicks the rating button -->
+      <div id="login-modal" style="display: none;">
+        <p>Please sign in to rate this story.</p>
+        <a href="/login">Sign in</a>
+      </div>
+
+      <span id='results'>2.5</span>
+
+      <label for="rating-input">Rating</label>
+      <input type="hidden" name="rating" id="rating-input">
+      <input type="hidden" name="story_id" id="story_id" value="<?php echo $story_id; ?>">
+      <div id="story-rating" class="mb-3"></div>
+      <button id="submit-btn" class="btn btn-outline-primary">Rate Story</button>
+      <div id="error-message" style="display:none;color:red;">You must be logged in to rate this story <br><a href="login.html">Click here</a></div>
+      <!-- #TODO send them back to the story page after logging in -->
+    </form>
+
     <div class="row justify-content-center mt-3">
       <a href="all_stories.php" type="button" class="btn btn-primary mr-3">Back to All Stories</a><br>
-      <?php if(isset($_SESSION['user'])) { ?>
+      <?php if (isset($_SESSION['user'])) { ?>
         <a href="storyteller_landing.php" type="button" class="btn btn-info ">Back to Your Stories</a><br>
-      <?php } elseif(isset($_SESSION['admin_id'])) { ?>
+      <?php } elseif (isset($_SESSION['admin_id'])) { ?>
         <a href="admin_landing.php" type="button" class="btn btn-info ">Back to Admin Landing</a><br>
       <?php } ?>
     </div>
   </div>
-  <?php include_once('./footer.php'); ?>
+
+  
+  <!-- Script Source Files -->
+
+
+  <!-- <script src="./rating.js"></script> -->
+  <script>
+   $(function () {
+    
+    // Initialize RateYo
+    $("#rating").rateYo({
+        rating: 3.5,
+        halfStar: true,
+        precision: 1,
+        onSet: function (rating, rateYoInstance) {
+            // Set the rating input value when the rating is changed
+            $('#rating-input').val(rating);
+            // display result
+            $('#results').text(rating);
+        }
+    });
+
+    
+    // Handle form submission
+    $('#submit-btn').click(function(e) {
+        e.preventDefault();
+
+        if (!<?php echo isset($_SESSION['user_id']) || isset($_SESSION['admin_id']) ? 'true' : 'false' ?>) {
+            $('#error-message').css('display', 'block');
+            return;
+        }
+        
+        // Get the rating value and story ID
+        var rating = $('#rating-input').val();
+        var story_id = $('#story_id').val();
+    
+        // Post the rating to the server using AJAX
+        $.ajax({
+            url: './rate_story.php',
+            type: 'POST',
+            data: { rating: rating, story_id: story_id},
+            success: function(data) {
+                // Handle the server response
+                console.log("Rating saved!");
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log('AJAX Error: ' + textStatus + ' ' + errorThrown);
+            }
+        });
+    });
+});
+  </script>
+
+  <!-- dropdownMenuLink js -->
+  <!-- <script src="./assets/js/nav.js"></script> -->
+  <!-- Popper JS -->
+  <script src="./assets/js/popper.min.js"></script>
+  <!-- Font Awesome -->
+  <script src="./assets/js/all.min.js"></script>
+
+  <!-- End Script Source Files -->
+
+
 </body>
 
 </html>
