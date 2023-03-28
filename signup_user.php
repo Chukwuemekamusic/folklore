@@ -150,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <p class="text-muted mb-0">Enter your credentials below</p>
                     </div>
                     <div class="card-body">
-                        <form action="signup.php" method="post" id="signup-form">
+                        <form action="signup_user.php" method="post" id="signup-form">
                             <div class="form-group">
                                 <label for="firstName">First Name</label>
                                 <input type="text" class="form-control" name="firstName" required>

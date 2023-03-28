@@ -95,11 +95,13 @@ foreach ($categories as $category) {
             </ul>
           </li>
           </li>
-          <?php if (isset($_SESSION['user_id'])) { ?>
+          <?php if (isset($_SESSION['writer'])) { ?>
             <li class="nav-item"><a href="storyteller_landing.php" class="nav-link">Storyteller</a></li>
           <?php } elseif (isset($_SESSION['admin_id'])) { ?>
             <li class="nav-item"><a href="admin_dashboard.php" class="nav-link">Admin</a></li>
-          <?php } ?>
+          <?php } elseif (isset($_SESSION['user_id']) && !isset($_SESSION['writer'])) { ?>
+            <li class="nav-item"><a href="admin_dashboard.php" class="nav-link">Hi You</a></li>
+          <?php }?>
           <!-- <li class="nav-item"><a href="#" class="nav-link">Explore Stories</a></li> -->
           <li class="nav-item dropdown">
             <?php if (isset($_SESSION['user_id']) || isset($_SESSION['admin_id'])) { ?>
@@ -107,7 +109,7 @@ foreach ($categories as $category) {
                 Logout
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <?php if (isset($_SESSION['user_id'])) { ?>
+                <?php if (isset($_SESSION['user_id']) && isset($_SESSION['writer'])) { ?>
                   <a class="dropdown-item" href="logout.php">Storyteller</a>
                 <?php } ?>
                 <?php if (isset($_SESSION['admin_id'])) { ?>

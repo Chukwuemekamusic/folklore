@@ -4,6 +4,8 @@ include_once('./connection.php');
 include_once('./functions.php');
 $categories = get_user_details('*', 'legends');
 $continents = get_user_details('*', 'continents');
+$user_id = $_SESSION['user_id'];
+$user_name = get_user_details("first_name", "users", "id = $user_id")[0]['first_name'];
 
 // foreach ($categories as $category) {
 //   switch ($category['name']) {
@@ -95,10 +97,12 @@ $continents = get_user_details('*', 'continents');
             </ul>
           </li>
           </li>
-          <?php if (isset($_SESSION['user_id'])) { ?>
+          <?php if (isset($_SESSION['writer'])) { ?>
             <li class="nav-item"><a href="storyteller_landing.php" class="nav-link">Storyteller</a></li>
           <?php } elseif (isset($_SESSION['admin_id'])) { ?>
             <li class="nav-item"><a href="admin_dashboard.php" class="nav-link">Admin</a></li>
+          <?php } elseif (isset($_SESSION['reader'])) { ?>
+            <li class="nav-item"><a href="#" class="nav-link">Hi <?php echo $user_name ?></a></li>
           <?php } ?>
           <!-- <li class="nav-item"><a href="#" class="nav-link">Explore Stories</a></li> -->
           <li class="nav-item dropdown">
