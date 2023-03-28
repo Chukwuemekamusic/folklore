@@ -2,7 +2,7 @@
 session_start();
 include_once('connection.php');
 // Check if the user is logged in
-if (!isset($_SESSION["user_id"]) || !isset($_SESSION['admin'])) {
+if ((!isset($_SESSION["writer"] )) || !isset($_SESSION['admin'])) {
   header("Location: login.php");
   exit();
 } ?>
@@ -66,12 +66,7 @@ if (!isset($_SESSION["user_id"]) || !isset($_SESSION['admin'])) {
           }
 
           ?>
-          <!-- <option value="greek myths">Greek Myths</option>
-            <option value="norse legends">Norse Legends</option>
-            <option value="african folktales">African Folktales</option>
-            <option value="south american myths">South American Myths</option>
-            <option value="roman mythology">Roman Mythology</option>
-            <option value="arthurian wars">Arthurian Wars</option> -->
+          
         </select>
       </div>
 
@@ -111,6 +106,13 @@ if (!isset($_SESSION["user_id"]) || !isset($_SESSION['admin'])) {
           <input type="text" class="form-control" id="story-tags" name="story-tags" placeholder="Enter relevant keywords or tags">
           <small class="text-muted">Separate tags with commas</small>
         </div>
+       
+        #TODO CREATE FORM FOR LONGNITUDE AND LATITUDE
+        <!-- <div class="form-group">
+          <label for="story-tags">L:</label>
+          <input type="text" class="form-control" id="story-tags" name="story-tags" placeholder="Enter relevant keywords or tags">
+          <small class="text-muted">Separate tags with commas</small>
+        </div> -->
 
         <!-- Image upload input -->
         <div class="form-group">

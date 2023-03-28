@@ -35,11 +35,18 @@ session_start();
         if(mysqli_num_rows($result) == 1) 
         {
             $row = $result->fetch_assoc();
-
             $_SESSION['user'] = true;
             $_SESSION['first_name'] = $row['first_name'];
-            $_SESSION['user_id'] = $row['id']; //
-            header('location: storyteller_landing.php');
+            $_SESSION['user_id'] = $row['id']; 
+
+            if ($row['is_writer'] == 1) {
+                $_SESSION['writer'] = true;
+                header('location: storyteller_landing.php');
+            }elseif ($row['is_writer'] == 0) {
+                $_SESSION['reader'] = true;
+                header('Location: index.php');
+            }
+            
         }
         else 
         {

@@ -1,7 +1,7 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id'])) {
-  header("Location: webpage.html");
+if (!isset($_SESSION['user_id']) && !isset($_SESSION['writer'])) {
+  header("Location: index.php");
 }
 
 $user_id = $_SESSION['user_id'];

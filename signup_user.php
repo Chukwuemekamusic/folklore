@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $dob = new DateTime($_POST['dob']);
   $dob = $dob->format('Y-m-d');
   $password = $_POST['password'];
-  $is_writer = 1;
+  $is_writer = 0;
   
   // check if data exists already
   $sql = "SELECT * FROM users WHERE first_name=? AND last_name=? AND email=?";
@@ -123,7 +123,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="login.html">Storyteller</a>
-                    <a class="dropdown-item" href="login_user.html">Storyseeker</a>
                     <a class="dropdown-item" href="admin_login.html">Admin</a>
                   </div>
                 <?php } ?>
@@ -146,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="col-md-6 col-lg-5">
                 <div class="card border-0 shadow">
                     <div class="card-header bg-transparent text-center">
-                        <h3 class="mb-0">Become a storyteller!</h3>
+                        <h3 class="mb-0">Be a part of this Community!</h3>
                         <div class="border-top border-primary w-75 mx-auto my-3"></div>
                         <p class="text-muted mb-0">Enter your credentials below</p>
                     </div>
