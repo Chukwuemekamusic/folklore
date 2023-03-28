@@ -56,25 +56,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt->execute()) {
 
         //compare the 2;
-        if ($storyTags) { 
+        if ($storyTags) {
             // Delete existing tags for the story
             $sql = "DELETE FROM story_tag WHERE story_id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $story_id);
             $stmt->execute();
             $stmt->close();
-          
+
             // Insert the new tags into the database
             $insertStmt = $conn->prepare("CALL insert_tag(?, ?)");
             foreach ($storyTags as $tag) {
-              $insertStmt->bind_param("is", $story_id, trim($tag));
-              $insertStmt->execute();
+                $insertStmt->bind_param("is", $story_id, trim($tag));
+                $insertStmt->execute();
             }
             $insertStmt->close();
             header("Location: admin_landing.php");
             exit();
         } else {
-        echo "Error: " . $stmt->error;
+            echo "Error: " . $stmt->error;
         }
     }
 }
@@ -104,44 +104,52 @@ ob_end_flush();
 <body>
     <div class="container py-5 ">
         <!-- <div class=$oldTags = $story['tags'];"row justify-content-center"> -->
-            <!-- <div class="col-md-6 col-lg-5"> -->
-                <div class="card border-0 shadow p-3">
-                    <h1 class="mt-5">Edit Story</h1>
-                    <form method="POST">
-                        <div class="form-group">
-                            <label for="title">Title:</label>
-                            <input type="text" class="form-control" name="title" value="<?php echo $story['title']; ?>" required><br>
+        <!-- <div class="col-md-6 col-lg-5"> -->
+        <div class="card border-0 shadow p-3">
+            <h1 class="mt-5">Edit Story</h1>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" class="form-control" name="title" value="<?php echo $story['title']; ?>" required><br>
 
-                            <label for="description">Description:</label>
-                            <input type="text" class="form-control" name="description" value="<?php echo $story['description']; ?>" required><br>
+                    <label for="description">Description:</label>
+                    <input type="text" class="form-control" name="description" value="<?php echo $story['description']; ?>" required><br>
 
-                            <label for="content">Content:</label>
-                            <textarea name="content" class="form-control" rows="10" required><?php echo $story['content']; ?></textarea><br>
-                            
-                            <label for="story-tags">Tags (maximum of 3):</label>
-                            <input type="text" class="form-control" id="story-tags" name="story-tags" value="<?php echo $story['tags']; ?>"><br>
-                            <small class="text-muted">Separate tags with commas</small> <br>
+                    <label for="content">Content:</label>
+                    <textarea name="content" class="form-control" rows="10" required><?php echo $story['content']; ?></textarea><br>
+
+                    <label for="image">Image:</label>
+                    <input type="file" class="form-control" name="image"><br>
+                    <?php if (!empty($story['image_url'])) { ?>
+                        <img src="<?php echo $story['image_url']; ?>" alt="Story image" width="200">
+                    <?php } ?>
+                    <!-- hidden input with current image_url address -->
+                    <input type="hidden" name="current-image" value="<?php echo $story['image_url']; ?>"><br><br>
+
+                    <label for="story-tags">Tags (maximum of 3):</label>
+                    <input type="text" class="form-control" id="story-tags" name="story-tags" value="<?php echo $story['tags']; ?>"><br>
+                    <small class="text-muted">Separate tags with commas</small> <br>
 
 
-                            <input type="submit" value="Save Changes" class="btn btn-primary">
-                        </div>
-                    </form>
-                   <a href="./admin_landing.php"><input type="button" value="CANCEL" class="btn btn-danger"></a>
+                    <input type="submit" value="Save Changes" class="btn btn-primary">
                 </div>
-            <!-- </div> -->
+            </form>
+            <a href="./admin_landing.php"><input type="button" value="CANCEL" class="btn btn-danger"></a>
+        </div>
         <!-- </div> -->
-</div>
+        <!-- </div> -->
+    </div>
     <!-- jQuery -->
-  <!-- <script src="./tutorial/js/jquery-3.5.1.min.js"></script> -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- personal script  -->
-  <script src="./assests/js/sign.js"></script>
-  <!-- Bootstrap 4.5 JS -->
-  <script src="./tutorial/js/bootstrap.min.js"></script>
-  <!-- Popper JS -->
-  <script src="./tutorial/js/popper.min.js"></script>
-  <!-- Font Awesome -->
-  <script src="./tutorial/js/all.min.js"></script>
+    <!-- <script src="./tutorial/js/jquery-3.5.1.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- personal script  -->
+    <script src="./assests/js/sign.js"></script>
+    <!-- Bootstrap 4.5 JS -->
+    <script src="./tutorial/js/bootstrap.min.js"></script>
+    <!-- Popper JS -->
+    <script src="./tutorial/js/popper.min.js"></script>
+    <!-- Font Awesome -->
+    <script src="./tutorial/js/all.min.js"></script>
 </body>
 
 </html>

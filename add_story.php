@@ -2,10 +2,11 @@
 session_start();
 include_once('connection.php');
 // Check if the user is logged in
-if (!isset($_SESSION["user_id"]) || !isset($_SESSION['admin'])) {
+if (!isset($_SESSION["user_id"]) && !isset($_SESSION['admin']) ) {
   header("Location: login.php");
   exit();
-} ?>
+}
+//  echo $_SESSION['user_id']; exit;?>
 
 <!DOCTYPE html>
 <html lang="en">
