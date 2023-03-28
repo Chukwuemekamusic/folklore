@@ -288,3 +288,12 @@ function edit_category($id, $name, $description, $image = null) {
     return $result;
 }
 
+// function to check if user is logged in
+function isLoggedIn() {
+    if (isset($_SESSION['user_id']) || isset($_SESSION['admin_id'])) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
