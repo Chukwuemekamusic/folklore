@@ -128,7 +128,7 @@ ob_end_flush();
                     <?php } ?>
 
                     <!-- hidden input with current image_url address -->
-                    <input type="hidden" name="current-image" value="<?php echo $story['image_url']; ?>">
+                    <input type="hidden" name="current-image" value="<?php echo $story['image_url']; ?>"><br><br>
 
                     <label for="story-tags">Tags (maximum of 3):</label>
                     <input type="text" class="form-control" id="story-tags" name="story-tags" value="<?php echo $story['tags']; ?>"><br>
