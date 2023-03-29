@@ -123,6 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="login.html">Storyteller</a>
+                    <a class="dropdown-item" href="login_user.html">Storyseeker</a>
                     <a class="dropdown-item" href="admin_login.html">Admin</a>
                   </div>
                 <?php } ?>
