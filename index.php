@@ -4,35 +4,13 @@ include_once('./connection.php');
 include_once('./functions.php');
 $categories = get_user_details('*', 'legends');
 $continents = get_user_details('*', 'continents');
-$user_id = $_SESSION['user_id'];
-$user_name = get_user_details("first_name", "users", "id = $user_id")[0]['first_name'];
+if (isset($_SESSION['user_id'])) {
+  $user_id = $_SESSION['user_id'] ?? '';
+  $user_name = get_single_detail("first_name", "users", "id = $user_id");
+}
 
-// foreach ($categories as $category) {
-//   switch ($category['name']) {
-//       case 'Greek Myths':
-//           $greekId = $category['legend_id'];
-//           break;
-//       case 'Norse Legends':
-//           $norseId = $category['legend_id'];
-//           break;
-//       case 'African Folktales':
-//           $africanId = $category['legend_id'];
-//           break;
-//       case 'Asian Ghost Stories':
-//           $asianId = $category['legend_id'];
-//           break;
-//       case 'South American Myths':
-//           $southAmericanId = $category['legend_id'];
-//           break;
-//       case 'Roman Mythology':
-//           $romanId = $category['legend_id'];
-//           break;
-//       default:
-//           // handle the case when the category name doesn't match any of the expected values
-//           break;
-//   }
- 
-// }
+// $full_name = get_fullname("first_name", "last_name", "users", "id = $user_id");
+
 
 ?>
 <!DOCTYPE html>
@@ -96,7 +74,6 @@ $user_name = get_user_details("first_name", "users", "id = $user_id")[0]['first_
               <li><a class="dropdown-item" href="./all_stories.php">All Stories</a></li>
             </ul>
           </li>
-          </li>
           <?php if (isset($_SESSION['writer'])) { ?>
             <li class="nav-item"><a href="storyteller_landing.php" class="nav-link">Storyteller</a></li>
           <?php } elseif (isset($_SESSION['admin_id'])) { ?>
@@ -104,6 +81,7 @@ $user_name = get_user_details("first_name", "users", "id = $user_id")[0]['first_
           <?php } elseif (isset($_SESSION['reader'])) { ?>
             <li class="nav-item"><a href="#" class="nav-link">Hi <?php echo $user_name ?></a></li>
           <?php } ?>
+          </li>
           <!-- <li class="nav-item"><a href="#" class="nav-link">Explore Stories</a></li> -->
           <li class="nav-item dropdown">
             <?php if (isset($_SESSION['user_id']) || isset($_SESSION['admin_id'])) { ?>
@@ -111,11 +89,14 @@ $user_name = get_user_details("first_name", "users", "id = $user_id")[0]['first_
                 Logout
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <?php if (isset($_SESSION['user_id'])) { ?>
+                <?php if (isset($_SESSION['writer'])) { ?>
                   <a class="dropdown-item" href="logout.php">Storyteller</a>
                 <?php } ?>
                 <?php if (isset($_SESSION['admin_id'])) { ?>
                   <a class="dropdown-item" href="logout.php">Admin</a>
+                <?php } ?>
+                <?php if (isset($_SESSION['reader'])) { ?>
+                  <a class="dropdown-item" href="logout.php">Goodbye <?php echo $user_name ?></a>
                 <?php } ?>
               </div>
             <?php } else { ?>
@@ -199,23 +180,23 @@ $user_name = get_user_details("first_name", "users", "id = $user_id")[0]['first_
     </div>
   </div>
   <div class="row">
-    <?php 
+    <?php
     $homepageStories = getHomepageStories();
     // print_r($homepageStory);
     // exit;
-    foreach($homepageStories as $homepageStory) {?>
-    <div class="col-md-4 mb-4">
-      <div class="card h-100 featured-story">
-        <img src="<?php echo $homepageStory['image_url'] ?>" class="card-img-top w-100" alt="Featured Story" style="height: 300px;">
-        <div class="card-body">
-          <h5 class="card-title"><?php echo $homepageStory['title'] ?></h5>
-          <p class="card-text"><?php echo $homepageStory['description'] ?></p>
-          <a href="view_story2.php?story_id=<?php echo $homepageStory['id']; ?>" class="btn btn-primary">Read More</a>
+    foreach ($homepageStories as $homepageStory) { ?>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 featured-story">
+          <img src="<?php echo $homepageStory['image_url'] ?>" class="card-img-top w-100" alt="Featured Story" style="height: 300px;">
+          <div class="card-body">
+            <h5 class="card-title"><?php echo $homepageStory['title'] ?></h5>
+            <p class="card-text"><?php echo $homepageStory['description'] ?></p>
+            <a href="view_story2.php?story_id=<?php echo $homepageStory['id']; ?>" class="btn btn-primary">Read More</a>
+          </div>
         </div>
       </div>
-    </div>
     <?php } ?>
-    
+
     <!-- add more col-md-->
   </div>
 
@@ -232,29 +213,29 @@ $user_name = get_user_details("first_name", "users", "id = $user_id")[0]['first_
           <div class="border-top border-primary w-25 mx-auto my-3"></div>
         </div>
       </div>
-      
+
       <div class="row">
-      <?php foreach($categories as $i=>$category) {
-            if ($i%3 == 0 && $i != 0){?>
-            </div>
-     
-            <div class="row">
-            <?php } ?>
-            <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <img src="<?php echo $category['image_url'] ?? ''?>" class="card-img-top" alt="Greek Myths">
-            <div class="card-body">
-              <a href="legend_stories.php?category_id=<?php echo $category['legend_id']?>">
-                <h5 class="card-title"><?php echo $category['name']?></h5>
-              </a>
-              <p class="card-text"><?php echo $category['description']?></p>
-            </div>
-          </div>
-        </div>                
-      <?php } ?>
+        <?php foreach ($categories as $i => $category) {
+          if ($i % 3 == 0 && $i != 0) { ?>
       </div>
-     
-      
+
+      <div class="row">
+      <?php } ?>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <img src="<?php echo $category['image_url'] ?? '' ?>" class="card-img-top" alt="Greek Myths">
+          <div class="card-body">
+            <a href="legend_stories.php?category_id=<?php echo $category['legend_id'] ?>">
+              <h5 class="card-title"><?php echo $category['name'] ?></h5>
+            </a>
+            <p class="card-text"><?php echo $category['description'] ?></p>
+          </div>
+        </div>
+      </div>
+    <?php } ?>
+      </div>
+
+
     </div>
   </section>
   <!-- End of Popular Stories -->

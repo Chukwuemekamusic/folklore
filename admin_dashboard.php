@@ -23,6 +23,9 @@ $num_stories_month = get_num_rows('stories', 'created_at >= DATE_SUB(NOW(), INTE
 // Get most popular stories
 $popular_stories = get_popular_stories(5);
 
+// Get top rated stories
+$top_stories = get_top_rated_stories(5);
+
 ?>
 <html>
 
@@ -147,14 +150,45 @@ $popular_stories = get_popular_stories(5);
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Top Rated Stories</h5>
+                        <div class="card-text">
+                            <table>
+                                <thead>
+                                    <tr>
 
+                                        <th scope="col" data-sortable>Story id</th>
+                                        <th scope="col" data-sortable>Title</th>
+                                        <th scope="col" data-sortable>Rating</th>
 
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($top_stories as $i => $story) { ?>
+                                        <tr>
+
+                                            <td><?php echo $story['id'] ?></td>
+                                            <a href=""></a>
+                                            <td><a href="view_story2.php?story_id=<?php echo $story['id']; ?>"><?php echo $story['title']; ?></a></td>
+                                            <td><?php echo $story['rating']; ?></td>
+                                        </tr>
+                                    <?php } ?>
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
+
     <!-- js scripts -->
     <?php include_once('./footer.php'); ?>
 </body>

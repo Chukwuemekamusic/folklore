@@ -58,6 +58,23 @@ function get_popular_stories($limit)
     }
 }
 
+// get top-rated stories
+function get_top_rated_stories($limit)
+{
+    global $conn;
+    $sql = "SELECT id, title, rating FROM stories
+            ORDER BY rating DESC
+            LIMIT $limit";
+
+    $result = $conn->query($sql);
+    if (!$result) {
+        echo "Error: " . $conn->error;
+        return null;
+    } else {
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+}
+
 function get_user_details($details, $table, $condition = '', $order_by = '')
 {
     global $conn;
@@ -297,3 +314,10 @@ function isLoggedIn() {
     }
 }
 
+function get_single_detail($name, $table, $condition) {
+    return get_user_details($name, $table, $condition)[0][$name];
+}
+
+function get_fullname($firstname, $lastname, $table, $condition) {
+    return get_single_detail($firstname, $table, $condition) ." " . get_single_detail($lastname, $table, $condition);
+}

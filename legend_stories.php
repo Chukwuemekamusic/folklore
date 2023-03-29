@@ -1,12 +1,14 @@
 <?php
+session_start();
 include_once('./connection.php');
 include_once('./functions.php');
 $categories = get_user_details('*', 'legends');
 $continents = get_user_details('*', 'continents');
 
-// if(!isset($_GET['category_id'])) {
-//     header('Location: index.php');
-// }
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'] ?? '';
+    $user_name = get_single_detail("first_name", "users", "id = $user_id");
+}
 
 $legend_id = $_GET['category_id'] ?? '';
 if ($legend_id) {
@@ -91,12 +93,14 @@ if ($continent_id) {
                             <li><a class="dropdown-item" href="./all_stories.php">All Stories</a></li>
                         </ul>
                     </li>
-                    </li>
-                    <?php if (isset($_SESSION['user_id'])) { ?>
+                    <?php if (isset($_SESSION['writer'])) { ?>
                         <li class="nav-item"><a href="storyteller_landing.php" class="nav-link">Storyteller</a></li>
                     <?php } elseif (isset($_SESSION['admin_id'])) { ?>
                         <li class="nav-item"><a href="admin_dashboard.php" class="nav-link">Admin</a></li>
+                    <?php } elseif (isset($_SESSION['reader'])) { ?>
+                        <li class="nav-item"><a href="#" class="nav-link">Hi <?php echo $user_name ?></a></li>
                     <?php } ?>
+                    </li>
                     <!-- <li class="nav-item"><a href="#" class="nav-link">Explore Stories</a></li> -->
                     <li class="nav-item dropdown">
                         <?php if (isset($_SESSION['user_id']) || isset($_SESSION['admin_id'])) { ?>
@@ -104,11 +108,14 @@ if ($continent_id) {
                                 Logout
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <?php if (isset($_SESSION['user_id'])) { ?>
+                                <?php if (isset($_SESSION['writer'])) { ?>
                                     <a class="dropdown-item" href="logout.php">Storyteller</a>
                                 <?php } ?>
                                 <?php if (isset($_SESSION['admin_id'])) { ?>
                                     <a class="dropdown-item" href="logout.php">Admin</a>
+                                <?php } ?>
+                                <?php if (isset($_SESSION['reader'])) { ?>
+                                    <a class="dropdown-item" href="logout.php">Goodbye <?php echo $user_name ?></a>
                                 <?php } ?>
                             </div>
                         <?php } else { ?>
@@ -117,6 +124,7 @@ if ($continent_id) {
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="login.html">Storyteller</a>
+                                <a class="dropdown-item" href="login_user.html">Storyseeker</a>
                                 <a class="dropdown-item" href="admin_login.html">Admin</a>
                             </div>
                         <?php } ?>

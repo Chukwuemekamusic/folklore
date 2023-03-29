@@ -12,14 +12,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $is_writer = 1;
   
   // check if data exists already
-  $sql = "SELECT * FROM users WHERE first_name=? AND last_name=? AND email=?";
+  $sql = "SELECT * FROM users WHERE email=?";
   $result = $conn->prepare($sql);
-  $result->bind_param("sss", $firstname, $lastname, $email);
+  $result->bind_param("s", $email);
   $result->execute();
   $result->store_result();
   if ($result->num_rows > 0) {
-      echo "Contact already exists! <br>";
-      echo "<a href='signup.html'>Return to signup</a>";
+      echo "Email already exists! <br>";
+      echo "<a href='signup.php'>Return to signup</a>";
       exit;
   }
   $result->free_result();

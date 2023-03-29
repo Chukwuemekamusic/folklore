@@ -5,7 +5,11 @@ include_once('functions.php');
 $categories = get_user_details('*', 'legends');
 $continents = get_user_details('*', 'continents');
 
-$loggedIn = isLoggedIn();
+// $loggedIn = isLoggedIn();
+if (isset($_SESSION['user_id'])) {
+  $user_id = $_SESSION['user_id'] ?? '';
+  $user_name = get_single_detail("first_name", "users", "id = $user_id");
+}
 
 
 if (!isset($_GET['story_id'])) {
@@ -23,6 +27,10 @@ $result = $stmt->get_result();
 $story = $result->fetch_assoc();
 
 update_story_views($story_id);
+
+$avg_rating = get_single_detail('rating', 'stories', "id = $story_id");
+$author_id = get_single_detail('author_id', 'stories', "id=$story_id");
+$author_fullname = get_fullname("first_name", "last_name", "users", "id = $author_id");
 ?>
 
 <!DOCTYPE html>
@@ -92,12 +100,14 @@ update_story_views($story_id);
               <li><a class="dropdown-item" href="./all_stories.php">All Stories</a></li>
             </ul>
           </li>
-          </li>
-          <?php if (isset($_SESSION['user_id'])) { ?>
+          <?php if (isset($_SESSION['writer'])) { ?>
             <li class="nav-item"><a href="storyteller_landing.php" class="nav-link">Storyteller</a></li>
           <?php } elseif (isset($_SESSION['admin_id'])) { ?>
             <li class="nav-item"><a href="admin_dashboard.php" class="nav-link">Admin</a></li>
+          <?php } elseif (isset($_SESSION['reader'])) { ?>
+            <li class="nav-item"><a href="#" class="nav-link">Hi <?php echo $user_name ?></a></li>
           <?php } ?>
+          </li>
           <!-- <li class="nav-item"><a href="#" class="nav-link">Explore Stories</a></li> -->
           <li class="nav-item dropdown">
             <?php if (isset($_SESSION['user_id']) || isset($_SESSION['admin_id'])) { ?>
@@ -105,11 +115,14 @@ update_story_views($story_id);
                 Logout
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <?php if (isset($_SESSION['user_id'])) { ?>
+                <?php if (isset($_SESSION['writer'])) { ?>
                   <a class="dropdown-item" href="logout.php">Storyteller</a>
                 <?php } ?>
                 <?php if (isset($_SESSION['admin_id'])) { ?>
                   <a class="dropdown-item" href="logout.php">Admin</a>
+                <?php } ?>
+                <?php if (isset($_SESSION['reader'])) { ?>
+                  <a class="dropdown-item" href="logout.php">Goodbye <?php echo $user_name ?></a>
                 <?php } ?>
               </div>
             <?php } else { ?>
@@ -118,6 +131,7 @@ update_story_views($story_id);
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="login.html">Storyteller</a>
+                <a class="dropdown-item" href="login_user.html">Storyseeker</a>
                 <a class="dropdown-item" href="admin_login.html">Admin</a>
               </div>
             <?php } ?>
@@ -149,14 +163,15 @@ update_story_views($story_id);
             <p class="card-text"><?php echo nl2br($story['content']); ?></p>
           </div>
         </div>
+        <!-- author's name -->
+        <div class="mt-2 text-right"><i>story by</i> <?php echo $author_fullname ?></div>
       </div>
+
     </div>
 
     <form class="form-group">
 
-      <div class="rateyo" id="rating" 
-      data-rateyo-rating="4" data-rateyo-num-stars="5" 
-      data-rateyo-score="3">
+      <div class="rateyo" id="rating" data-rateyo-rating="<?php echo $avg_rating; ?>" data-rateyo-num-stars="5" data-rateyo-score="3">
       </div>
 
       <!-- Show a login modal when the user clicks the rating button -->
@@ -165,7 +180,7 @@ update_story_views($story_id);
         <a href="/login">Sign in</a>
       </div>
 
-      <span id='results'>2.5</span>
+      <span id='results'><?php echo $avg_rating; ?></span>
 
       <label for="rating-input">Rating</label>
       <input type="hidden" name="rating" id="rating-input">
@@ -176,9 +191,9 @@ update_story_views($story_id);
       <!-- #TODO send them back to the story page after logging in -->
     </form>
 
-    <div class="row justify-content-center mt-3">
+    <div class="row justify-content-center mt-3 mb-3">
       <a href="all_stories.php" type="button" class="btn btn-primary mr-3">Back to All Stories</a><br>
-      <?php if (isset($_SESSION['user'])) { ?>
+      <?php if (isset($_SESSION['writer'])) { ?>
         <a href="storyteller_landing.php" type="button" class="btn btn-info ">Back to Your Stories</a><br>
       <?php } elseif (isset($_SESSION['admin_id'])) { ?>
         <a href="admin_landing.php" type="button" class="btn btn-info ">Back to Admin Landing</a><br>
@@ -186,60 +201,66 @@ update_story_views($story_id);
     </div>
   </div>
 
-  
+
+
+
+
   <!-- Script Source Files -->
 
 
   <!-- <script src="./rating.js"></script> -->
   <script>
-   $(function () {
-    
-    // Initialize RateYo
-    $("#rating").rateYo({
+    $(function() {
+
+      // Initialize RateYo
+      $("#rating").rateYo({
         rating: 3.5,
         halfStar: true,
         precision: 1,
-        onSet: function (rating, rateYoInstance) {
-            // Set the rating input value when the rating is changed
-            $('#rating-input').val(rating);
-            // display result
-            $('#results').text(rating);
+        onSet: function(rating, rateYoInstance) {
+          // Set the rating input value when the rating is changed
+          $('#rating-input').val(rating);
+          // display result
+          $('#results').text(rating);
         }
-    });
+      });
 
-    
-    // Handle form submission
-    $('#submit-btn').click(function(e) {
+
+      // Handle form submission
+      $('#submit-btn').click(function(e) {
         e.preventDefault();
 
         if (!<?php echo isset($_SESSION['user_id']) || isset($_SESSION['admin_id']) ? 'true' : 'false' ?>) {
-            $('#error-message').css('display', 'block');
-            return;
+          $('#error-message').css('display', 'block');
+          return;
         }
-        
+
         // Get the rating value and story ID
         var rating = $('#rating-input').val();
         var story_id = $('#story_id').val();
-    
+
         // Post the rating to the server using AJAX
         $.ajax({
-            url: './rate_story.php',
-            type: 'POST',
-            data: { rating: rating, story_id: story_id},
-            success: function(data) {
-                // Handle the server response
-                console.log("Rating saved!");
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log('AJAX Error: ' + textStatus + ' ' + errorThrown);
-            }
+          url: './rate_story.php',
+          type: 'POST',
+          data: {
+            rating: rating,
+            story_id: story_id
+          },
+          success: function(data) {
+            // Handle the server response
+            console.log("Rating saved!");
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.log('AJAX Error: ' + textStatus + ' ' + errorThrown);
+          }
         });
+      });
     });
-});
   </script>
 
   <!-- dropdownMenuLink js -->
-  <!-- <script src="./assets/js/nav.js"></script> -->
+  <script src="./assets/js/nav.js"></script>
   <!-- Popper JS -->
   <script src="./assets/js/popper.min.js"></script>
   <!-- Font Awesome -->
