@@ -1,1 +1,14 @@
 # folklore
+=
+== how to load the tables
+create a database Folklore in your database using phpmyadmin. You can either use option A or option B
+=== option A
+you can use the create_table.php script to load all the table into your database 
+=== option B
+you can use individual table mysql scripts in the create_sql.adoc file. This adoc file is in the sql_scripts folder
+
+== populate the continents and legends table
+you can use the nysql populate scripts in the populate.adoc file. This file is inside the sql_scipts folder.
+NB: 
+* to load the pictures for the legend, you can do that as an admin. WHen logged in as admin, go to settings on your navbar, and edit category. You will see the option to load image. 
+* The admin can also add new legends there. No other continents can be added, since it is something that rarely changes.

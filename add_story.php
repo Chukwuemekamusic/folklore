@@ -2,15 +2,11 @@
 session_start();
 include_once('connection.php');
 // Check if the user is logged in
-<<<<<<< HEAD
-if ((!isset($_SESSION["writer"] )) || !isset($_SESSION['admin'])) {
-=======
-if (!isset($_SESSION["user_id"]) && !isset($_SESSION['admin']) ) {
->>>>>>> master
+if (!isset($_SESSION["user_id"]) && !isset($_SESSION['admin'])) {
   header("Location: login.php");
   exit();
 }
-//  echo $_SESSION['user_id']; exit;?>
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -112,7 +108,6 @@ if (!isset($_SESSION["user_id"]) && !isset($_SESSION['admin']) ) {
           <small class="text-muted">Separate tags with commas</small>
         </div>
        
-        #TODO CREATE FORM FOR LONGNITUDE AND LATITUDE
         <!-- <div class="form-group">
           <label for="story-tags">L:</label>
           <input type="text" class="form-control" id="story-tags" name="story-tags" placeholder="Enter relevant keywords or tags">

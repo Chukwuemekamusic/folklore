@@ -199,7 +199,7 @@ function update_story_views($story_id) //only updates views when the viewer is n
 
 // create random string no
 function randomStr($n = 8)
-{        //Stephen watkins https://stackoverflow.com/questions/4356289/php-random-string-generator
+{        // code gotten from Stephen watkins https://stackoverflow.com/questions/4356289/php-random-string-generator
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString = '';
@@ -214,7 +214,7 @@ function handle_image_upload($image, $current_image_path = '')
 {
     global $conn;
     $imagePath = '';
-    $max_size = 2 * 1024 * 1024; // 2 MB in bytes
+    $max_size = 5 * 1024 * 1024; // 5 MB in bytes
     // create directory if not present
     if (!is_dir('./images')) {
         if (mkdir('images', 511)) {
@@ -319,5 +319,5 @@ function get_single_detail($name, $table, $condition) {
 }
 
 function get_fullname($firstname, $lastname, $table, $condition) {
-    return get_single_detail($firstname, $table, $condition) ." " . get_single_detail($lastname, $table, $condition);
+    return ucfirst(get_single_detail($firstname, $table, $condition)) ." " . ucfirst(get_single_detail($lastname, $table, $condition));
 }

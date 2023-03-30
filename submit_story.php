@@ -9,7 +9,7 @@ if (!isset($_SESSION["user_id"])) {
   exit();
 }
 
-// validate user input to avoid sql injection
+// validate user input to avoid storage issues with unusual characters
 $user_id = $_SESSION["user_id"];
 $continentID = htmlspecialchars($_POST["continent"]);
 $legendID = htmlspecialchars($_POST["legend"]);
@@ -18,7 +18,7 @@ $storyDescription = htmlspecialchars($_POST['description']);
 $storyContent = htmlspecialchars($_POST['content']);
 // checks if tags are available before exploding
 $tags = isset($_POST["story-tags"]) ? explode(',', $_POST["story-tags"]) : [];
-$max_size = 2 * 1024 * 1024; // 2 MB in bytes
+$max_size = 5 * 1024 * 1024; // 5 MB in bytes
 
 //Process and upload the image
 $storyImage = $_FILES['image'] ?? null;
