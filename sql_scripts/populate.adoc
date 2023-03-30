@@ -41,7 +41,7 @@ BEGIN
 END //
 DELIMITER ;
 
-==== use case
+==== use case (DON'T LOAD THIS!!!)
 foreach ($tags as $tag) {
     $stmt = $conn->prepare("CALL insert_tag(?, ?)");
     $stmt->bind_param("is", $story_id, $tag);
@@ -49,44 +49,6 @@ foreach ($tags as $tag) {
     $stmt->close();
 }
 
-=== increase_view_count()
 
-DELIMITER //
-CREATE PROCEDURE increase_view_count(IN story_id INT, IN viewer_id INT)
-BEGIN
-    DECLARE author_id INT;
-    DECLARE admin_role VARCHAR(50);
-    
-    -- Get the author ID of the story
-    SELECT author_id FROM stories WHERE id = story_id INTO author_id;
-    
-    -- Get the role of the viewer
-    SELECT role FROM users WHERE id = viewer_id INTO admin_role;
-    
-    -- If the viewer is not the author or an admin, increase the view count
-    IF author_id <> viewer_id AND admin_role <> 'admin' THEN
-        UPDATE stories SET views = views + 1 WHERE id = story_id;
-    END IF;
-    
-END //
-DELIMITER ;
-==== use case (increase_view_count)
-
-// Set the input parameters for the procedure
-$story_id = 123;
-$viewer_id = 456;
-
-// Prepare the MySQL statement to call the procedure
-$stmt = $mysqli->prepare("CALL increase_view_count(?, ?)");
-
-// Bind the input parameters to the statement
-$stmt->bind_param("ii", $story_id, $viewer_id);
-
-// Execute the statement
-$stmt->execute();
-
-// Close the statement and connection
-$stmt->close();
-$mysqli->close();
 
 

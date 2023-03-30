@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('./connection.php');
 include_once('./functions.php');
 $stories = get_user_details('*', 'stories');
@@ -6,6 +7,10 @@ $search_query = $_POST['search-input'] ?? '';
 if ($search_query){
     // $search_query = mysql_real_escape_string($search_query); #TODO CHECK THE SANITIZE FUNCTION
     $search_stories = searchStories($search_query);
+}
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'] ?? '';
+    $user_name = get_single_detail("first_name", "users", "id = $user_id");
 }
 
 ?>

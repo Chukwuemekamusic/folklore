@@ -5,7 +5,7 @@
 // $password = 'tiger';
 
 $servername = "lamp-mysql8";
-$dbname = 'folktales';
+$dbname = 'folktales'; 
 $username = 'root';
 $password = 'tiger';
 

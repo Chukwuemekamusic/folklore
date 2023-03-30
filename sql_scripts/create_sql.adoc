@@ -61,7 +61,8 @@ CREATE TABLE regions (
 CREATE TABLE legends (
      legend_id INT(11)  AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description TEXT
+    description TEXT,
+    image_url VARCHAR(255)
 ) 
 
 // -- Association table between legends and regions
@@ -108,7 +109,6 @@ CREATE TABLE homepage_stories (
     CONSTRAINT uc_homepage_stories UNIQUE (position)
 )
 
-// #TODO new tables to create and add to database_schema.adoc
 
 // story_ratings table
 CREATE TABLE story_ratings (
@@ -128,7 +128,7 @@ CREATE TABLE story_ratings (
     CONSTRAINT uc_user_story UNIQUE (user_id, story_id)
 );
 
-
+// #TODO new tables to create and add to database_schema.adoc
 CREATE TABLE story_comments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     comment TEXT NOT NULL,

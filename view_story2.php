@@ -2,6 +2,7 @@
 session_start();
 include_once('connection.php');
 include_once('functions.php');
+include_once('./php_sharing_buttons/sharingbuttons.php');
 $categories = get_user_details('*', 'legends');
 $continents = get_user_details('*', 'continents');
 
@@ -42,6 +43,8 @@ $author_fullname = get_fullname("first_name", "last_name", "users", "id = $autho
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <!-- rateyo star lib -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+  <!-- social media css button -->
+  <link rel="stylesheet" href="./php_sharing_buttons/sharingbuttons.css">
   <!-- <link rel="stylesheet" type="text/css" href="jquery.rateyo.min.css">  -->
   <!-- personal css lib -->
   <link rel="stylesheet" href="./assets/css/style.css">
@@ -199,11 +202,13 @@ $author_fullname = get_fullname("first_name", "last_name", "users", "id = $autho
         <a href="admin_landing.php" type="button" class="btn btn-info ">Back to Admin Landing</a><br>
       <?php } ?>
     </div>
+    <br>
+    <hr>
+
+    <?php
+    showSharer("http://localhost/app/folklore/view_story2.php?story_id=9", "Read this amazing story!");
+    ?>
   </div>
-
-
-
-
 
   <!-- Script Source Files -->
 
