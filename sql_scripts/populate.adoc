@@ -8,7 +8,7 @@ INSERT INTO continents (name, description) VALUES
 ("Asia", "From the majestic mountains of the Himalayas to the bustling cities of Tokyo and Mumbai, Asia is a continent of contrasts. It is also home to some of the world's most enduring myths and legends, such as the ancient Chinese tale of the Monkey King and the Hindu epic, the Ramayana."),
 ("Europe", "The birthplace of Western civilization, Europe has a rich history of myth and legend. From the heroic exploits of Greek gods and heroes to the mystical legends of Arthurian England, Europe's myths and legends have inspired artists and storytellers for centuries."),
 ("North America", "From the thundering waterfalls of Niagara to the barren deserts of the Southwest, North America is a land of diverse landscapes and cultures. It is also home to a rich tradition of myths and legends, from the shape-shifting tricksters of Native American folklore to the chilling ghost stories of colonial New England."),
-("South America", "From the ancient ruins of Machu Picchu to the vibrant streets of Rio de Janeiro, South America is a continent of incredible diversity and beauty. Its myths and legends reflect this diversity, ranging from the shape-shifting spirits of the Amazon rainforest to the epic tales of the Inca Empire.")
+("South America", "From the ancient ruins of Machu Picchu to the vibrant streets of Rio de Janeiro, South America is a continent of incredible diversity and beauty. Its myths and legends reflect this diversity, ranging from the shape-shifting spirits of the Amazon rainforest to the epic tales of the Inca Empire.");
 
 == legends
 INSERT INTO legends(name, description) VALUES
@@ -17,7 +17,7 @@ INSERT INTO legends(name, description) VALUES
 ('African Folktales', 'Journey through the rich cultural heritage of Africa with these vibrant tales passed down from generation to generation.'),
 ('Asian Ghost Stories', 'Experience the spine-chilling thrill of Asian ghost stories, filled with vengeful spirits, haunted places, and ancient curses.'),
 ('South American Myths', 'Delve into the mystical world of South American mythology, featuring powerful deities, legendary heroes, and magical creatures.'),
-('Roman Mythology', 'Discover the captivating tales of Roman mythology, filled with powerful gods and goddesses, epic battles, and thrilling adventures that will transport you to ancient times.')
+('Roman Mythology', 'Discover the captivating tales of Roman mythology, filled with powerful gods and goddesses, epic battles, and thrilling adventures that will transport you to ancient times.');
 
 == procedures
 === insert_tag 

@@ -13,12 +13,14 @@ The stories table stores information about stories.
 | title | VARCHAR(255) | NOT NULL
 | description | TEXT | NOT NULL
 | content | TEXT | NOT NULL
-| image_url | VARCHAR(255) | NOT NULL
+| image_url | VARCHAR(255) | DEFAULT NULL
 | continent_id | INT | NOT NULL, FOREIGN KEY
-| subregion_id | INT | FOREIGN KEY
-| storyteller_id | INT | NOT NULL, FOREIGN KEY
-| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP
-| updated_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP
+| legend_id | INT | DEFAULT NULL, FOREIGN KEY, RESTRICT
+| author_id | INT | NOT NULL, FOREIGN KEY, RESTRICT
+| created_at | TIMESTAMP | DEFAULT NOW()
+| updated_at | TIMESTAMP | DEFAULT NOW(), ON UPDATE NOW()
+| views | INT | DEFAULT 0
+| rating | DECIMAL(10,1) | DEFAULT 2.5
 |===
 
 === Table continents
@@ -36,22 +38,6 @@ The continents table stores information about continents.
 | image_url | VARCHAR(255) | NOT NULL
 |===
 
-=== Table storytellers
-
-The storytellers table stores information about storytellers.
-
-[cols="3*"]
-|===
-^| Column Name ^| Data Type ^| Constraints
-| id | INT | PRIMARY KEY, AUTO_INCREMENT
-| first_name | VARCHAR(20) | NOT NULL
-| last_name | VARCHAR(20) | NOT NULL
-| email | VARCHAR(40) | NOT NULL
-| password | VARCHAR(20) | NOT NULL
-| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP
-| updated_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP
-|===
-
 === Table legends
 
 The legends table stores information about legends.
@@ -59,10 +45,104 @@ The legends table stores information about legends.
 [cols="3*"]
 |===
 ^| Column Name ^| Data Type ^| Constraints
-| id | INT(11) | PRIMARY KEY, AUTO_INCREMENT
+| legend_id | INT | PRIMARY KEY, AUTO_INCREMENT
+| name | VARCHAR(255) | NOT NULL
+| description | TEXT |
+| image_url | VARCHAR(255) |
+|===
+
+=== Table tags
+
+The tags table stores information about tags.
+
+[cols="3*"]
+|===
+^| Column Name ^| Data Type ^| Constraints
+| tag_id | INT | AUTO_INCREMENT, PRIMARY KEY
 | name | VARCHAR(255) | NOT NULL
 | description | TEXT |
 |===
+
+=== Table story_tag
+
+The story_tag table associates stories with tags.
+
+[cols="3*"]
+|===
+^| Column Name ^| Data Type ^| Constraints
+| story_id | INT | NOT NULL, FOREIGN KEY, CASCADE
+| tag_id | INT | NOT NULL, FOREIGN KEY, CASCADE
+|===
+
+=== Table admin
+
+The admin table stores information about the system's administrators.
+
+[cols="3*"]
+|===
+^| Column Name ^| Data Type ^| Constraints
+| id | INT | NOT NULL, AUTO_INCREMENT, PRIMARY KEY
+| username | VARCHAR(50) | NOT NULL, UNIQUE
+| first_name | VARCHAR(50) | NOT NULL
+| password | VARCHAR(255) | NOT NULL
+| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP
+| updated_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP
+|===
+
+=== Table homepage_stories
+
+The homepage_stories table stores information about the order of stories displayed on the homepage.
+
+[cols="3*"]
+|===
+^| Column Name ^| Data Type ^| Constraints
+| id | INT | AUTO_INCREMENT, PRIMARY KEY
+| story_id | INT | NOT NULL, FOREIGN KEY
+| position | INT | NOT NULL, UNIQUE
+|===
+
+=== Table story_ratings
+
+The story_ratings table stores information about the ratings and comments of stories by users.
+
+[cols="3*"]
+|===
+^| Column Name ^| Data Type ^| Constraints
+| id | INT | PRIMARY KEY, AUTO_INCREMENT
+| story_id | INT | NOT NULL, FOREIGN KEY
+| user_id | INT | NOT NULL, FOREIGN KEY
+| rating | DECIMAL(10,1) | NOT NULL
+| comment | TEXT |
+| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP
+| updated_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP
+|===
+Constraints:
+
+FOREIGN KEY (story_id) REFERENCES stories(id) ON DELETE CASCADE
+FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+UNIQUE KEY uc_user_story (user_id, story_id)
+
+=== Table story_ratings
+
+The story_ratings table stores information about ratings and comments for stories.
+
+[cols="3*"]
+|===
+^| Column Name ^| Data Type ^| Constraints
+| id | INT | PRIMARY KEY, AUTO_INCREMENT
+| story_id | INT | NOT NULL, FOREIGN KEY REFERENCES stories(id) ON DELETE CASCADE
+| user_id | INT | NOT NULL, FOREIGN KEY REFERENCES users(id) ON DELETE CASCADE
+| rating | DECIMAL(10,1) | NOT NULL
+| comment | TEXT |
+| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP
+| updated_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP
+|===
+
+Constraints:
+
+PRIMARY KEY: The id column is the primary key of the table.
+FOREIGN KEY: The story_id column references the id column of the stories table and is set to cascade on delete. The user_id column references the id column of the users table and is set to cascade on delete.
+UNIQUE: The combination of user_id and story_id must be unique.
 
 === Table regions
 
@@ -87,44 +167,4 @@ The legend_region table is an association table that links legends to regions.
 | region_id | INT(11) | NOT NULL, FOREIGN KEY to regions(id) ON DELETE CASCADE
 |===
 
-=== Table story_ratings
 
-The story_ratings table stores information about ratings given to stories by story seekers.
-
-[cols="3*"]
-|===
-^| Column Name ^| Data Type ^| Constraints
-| id | INT | PRIMARY KEY, AUTO_INCREMENT
-| story_id | INT | NOT NULL, FOREIGN KEY (story_id) REFERENCES stories(id) ON DELETE CASCADE
-| user_id | INT | NOT NULL, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-| rating | INT | NOT NULL, CHECK (rating >= 1 AND rating <= 5)
-| created_at | TIMESTAMP | DEFAULT NOW()
-| updated_at | TIMESTAMP | DEFAULT NOW() ON UPDATE NOW()
-|===
-
-* The id column is an auto-incrementing integer that serves as the primary key of the table.
-* The story_id column is a non-null integer that references the id column in the stories table and specifies the story that the rating is for. If a story is deleted from the stories table, then all corresponding ratings will be automatically deleted from the story_ratings table due to the ON DELETE CASCADE constraint.
-* The user_id column is a non-null integer that references the id column in the users table and specifies the story seeker who gave the rating. If a user is deleted from the users table, then all corresponding ratings will be automatically deleted from the story_ratings table due to the ON DELETE CASCADE constraint.
-* The rating column is a non-null integer that specifies the rating given by the story seeker. The CHECK constraint ensures that the rating is between 1 and 5 (inclusive).
-* The created_at column is a timestamp that specifies when the rating was created. The default value is the current timestamp.
-* The updated_at column is a timestamp that specifies when the rating was last updated. The default value is the current timestamp, and it is automatically updated to the current timestamp whenever the rating is updated.
-
-=== Table story_comments
-
-The story_comments table stores information about comments made by story seekers on stories.
-
-[cols="3*"]
-|===
-^| Column Name ^| Data Type ^| Constraints
-| id | INT | PRIMARY KEY, AUTO_INCREMENT
-| story_id | INT | NOT NULL, FOREIGN KEY (story_id) REFERENCES stories(id) ON DELETE CASCADE
-| user_id | INT | NOT NULL, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-| comment TEXT | NOT NULL
-| created_at | TIMESTAMP | DEFAULT NOW()
-| updated_at | TIMESTAMP | DEFAULT NOW() ON UPDATE NOW()
-|===
-
-* The id column is an auto-incrementing integer that serves as the primary key of the table.
-* The story_id column is a non-null integer that references the id column in the stories table and specifies the story that the comment is for. If a story is deleted from the stories table, then all corresponding comments will be automatically deleted from the story_comments table due to the ON DELETE CASCADE constraint.
-* The user_id column is a non-null integer that references the id column in the users table and specifies the story seeker who made the comment. If a user is deleted from the users table, then all corresponding comments will be automatically deleted from the story_comments table due to the ON DELETE CASCADE constraint.
-* The comment column is a non-null text field that specifies the comment made by the story seeker.
