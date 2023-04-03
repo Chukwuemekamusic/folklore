@@ -109,6 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <option value="category">Sort by Category</option>
                         <option value="earliest">Sort by Earliest</option>
                         <option value="latest">Sort by Latest</option>
+                        <option value="views">Sort by Views</option>
                     </select>
                 </div>
                 <div class="col-auto my-1">
@@ -133,7 +134,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $sql .= "ORDER BY created_at";
             } elseif ($sortby == 'latest') {
                 $sql .= "ORDER BY `created_at` DESC";
-            }
+            } elseif ($sortby == 'views') {
+                $sql .= "ORDER BY `views` DESC";
+            } 
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $result = $stmt->get_result();
