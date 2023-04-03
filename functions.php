@@ -198,8 +198,9 @@ function update_story_views($story_id) //only updates views when the viewer is n
 }
 
 // create random string no
+// code gotten from Stephen watkins https://stackoverflow.com/questions/4356289/php-random-string-generator
 function randomStr($n = 8)
-{        // code gotten from Stephen watkins https://stackoverflow.com/questions/4356289/php-random-string-generator
+{        
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString = '';

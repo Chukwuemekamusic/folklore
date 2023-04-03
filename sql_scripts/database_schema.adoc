@@ -74,6 +74,26 @@ The story_tag table associates stories with tags.
 | tag_id | INT | NOT NULL, FOREIGN KEY, CASCADE
 |===
 
+=== Table Users 
+
+The users table stores information about registered users (storyteller and storyseekers).
+
+[cols="3*"]
+|===
+^| Column Name ^| Data Type ^| Constraints
+| id | INT | NOT NULL, PRIMARY KEY, AUTO_INCREMENT
+| first_name | VARCHAR(20) | NOT NULL
+| last_name | VARCHAR(20) | NOT NULL
+| email | VARCHAR(40) | NOT NULL
+| password | VARCHAR(20) | NOT NULL
+| is_writer | BOOLEAN | NOT NULL, DEFAULT FALSE
+| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP
+| updated_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP
+| country | VARCHAR(40)
+| gender | ENUM('Male','Female','Other')
+| dob | DATE
+|===
+
 === Table admin
 
 The admin table stores information about the system's administrators.
