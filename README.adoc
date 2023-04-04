@@ -38,11 +38,13 @@ The insert into admin script for the admin user is also provided in the same fil
 
 == Populating the Continents and Legends Table
 
-To populate the continents and legends tables, use the mySQL populate scripts in the populate.adoc file located inside the sql_scripts folder. Use the scripts to populate the 
+To populate the continents and legends tables, use the mySQL populate scripts in the populate.adoc file located inside the sql_scripts folder. (Relative Path === sql_scripts/populate.adoc) Use the scripts to populate the tables
 
 Note the following:
 
 To load pictures for the legends, log in as an admin and go to settings on the navbar. Click on "edit category" and you'll see the option to upload an image.
+You can use images in the category_img folder inside img folder. Relative path is assets/img/category_img
+
 The admin can also add new legends. However, no other continents can be added, since it's a rare occurrence.
 
 == load the procedures
