@@ -18,7 +18,7 @@ include('connection.php');
   <title>Storyteller Landing Page</title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="./tutorial/css/style.css">
+  <link rel="stylesheet" href="./assets/css/style.css">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap" rel="stylesheet">
 </head>
@@ -38,9 +38,9 @@ include('connection.php');
         <li class="nav-item">
           <a class="nav-link" href="add_story.php">New Story</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item"> #TODO add a profile page later
           <a class="nav-link" href="#">Edit Profile</a>
-        </li>
+        </li> -->
         <li class="nav-item font-weight-bold">
           <a class="nav-link" href="./index.php">Home</a>
         </li>
@@ -63,7 +63,7 @@ include('connection.php');
       $stmt->execute();
       $result = $stmt->get_result();
       while ($row = $result->fetch_assoc()) {
-        $story_id = $row['id'];  #TODO change to story_id
+        $story_id = $row['id'];  
         $title = $row['title'];
         $views = $row['views'];
         $imagePath = $row['image_url'];

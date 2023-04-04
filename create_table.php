@@ -2,7 +2,6 @@
 
 include_once("./connection.php");
 
-# TODO adjust the story tellers
 // continents table
 $sql1 = "CREATE TABLE continents (
     continent_id INT(11) PRIMARY KEY AUTO_INCREMENT,
@@ -219,6 +218,16 @@ if (mysqli_query($conn, $sql11)) {
     
 } else {
     echo "Error creating story_ratings table: " . mysqli_error($conn);
+}
+echo "<br>";
+
+$sql_admin = "INSERT INTO admin (username, first_name, password) VALUES ('admin@rgu', 'admin', 'admin@rgu')";
+
+if (mysqli_query($conn, $sql_admin)) {
+echo "Record inserted successfully into admin table";
+
+} else {
+echo "Error inserting record into admin table: " . mysqli_error($conn);
 }
 echo "<br>";
 

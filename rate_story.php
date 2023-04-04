@@ -5,15 +5,16 @@ include_once('./functions.php');
 
 // Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the user ID from the session (you can modify this based on your authentication system)
+    // Get the user ID from the session 
     $user_id = $_SESSION['user_id'];
     $story_id = $_POST['story_id'];
     $rating = $_POST['rating'];
 
     // Get the comment from the form submission
-    $comment = $_POST['comment'] ?? '';
+    $comment = $_POST['comment'] ?? '';         // #TODO add comment later if time permits
 
     // Insert the rating into the database
+    // NB: the admin cannot rate a story!!!
     $stmt = $conn->prepare('REPLACE INTO story_ratings (story_id, user_id, rating, comment) VALUES (?, ?, ?, ?)');
     $stmt->bind_param("iids", $story_id, $user_id, $rating, $comment);
     if ($stmt->execute()) {
