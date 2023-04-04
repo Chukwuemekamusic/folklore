@@ -1,14 +1,79 @@
-# folklore
-=
-== how to load the tables
-create a database Folklore in your database using phpmyadmin. You can either use option A or option B
-=== option A
-you can use the create_table.php script to load all the table into your database 
-=== option B
-you can use individual table mysql scripts in the create_sql.adoc file. This adoc file is in the sql_scripts folder
+// # folklore
+= Requirement for Story telling App
 
-== populate the continents and legends table
-you can use the nysql populate scripts in the populate.adoc file. This file is inside the sql_scipts folder.
-NB: 
-* to load the pictures for the legend, you can do that as an admin. WHen logged in as admin, go to settings on your navbar, and edit category. You will see the option to load image. 
-* The admin can also add new legends there. No other continents can be added, since it is something that rarely changes.
+== Introduction
+
+This document outlines the requirements for running the Storytelling Web App.
+
+== Configuration
+
+Before using the Storytelling Web App, ensure that the following software is installed:
+
+PHP 7.0 or higher 
+
+MySQL 5.4 or higher
+
+Apache 2.4 or higher
+
+PHPMyAdmin
+
+You will also need to configure the connection to your MySQL database. To do this, adjust the settings in the connection.php file to match the name of your database and your database password.
+
+== Loading the Tables
+
+To load the required tables, create a database named Folktales in your MySQL server using phpMyAdmin. Then, you can choose one of the following options:
+
+=== Option A
+
+Run the create_table.php script to load all the tables into your database.
+The admin user is automatically created.
+**Log in as the admin user** with the following:
+*  _username_ **admin@rgu**
+* _password_ **admin@rgu**.
+
+=== Option B
+
+Use individual table MySQL scripts in the create_sql.adoc file located in the sql_scripts folder.
+The insert into admin script for the admin user is also provided in the same file.
+
+== Populating the Continents and Legends Table
+
+To populate the continents and legends tables, use the mySQL populate scripts in the populate.adoc file located inside the sql_scripts folder. Use the scripts to populate the 
+
+Note the following:
+
+To load pictures for the legends, log in as an admin and go to settings on the navbar. Click on "edit category" and you'll see the option to upload an image.
+The admin can also add new legends. However, no other continents can be added, since it's a rare occurrence.
+
+== load the procedures
+
+In this app, we only have only procedures to be loaded for the tag creation. it is located inside the populate.adoc file, which is inside the sql_scirpts. You can load it directly in phpmyadmin.
+
+== Software Requirements
+== Operating System
+
+The Storytelling Web App can run on any operating system that supports a web browser.
+
+=== Web Server
+
+The web server must support PHP version 7 or higher and Apache 2.4 or higher.
+
+=== Database
+
+The database used for the Storytelling Web App must support MySQL version 5.7 or higher.
+
+=== Front-End Frameworks
+
+The Storytelling Web App uses Bootstrap and jQuery, which are included in the assets folder of the application.
+
+=== Additional Libraries
+
+The Storytelling Web App uses the RateYo library, which is included in the assets folder of the application.
+
+=== Browser Compatibility
+
+The Storytelling Web App is compatible with all modern web browsers including Chrome, Firefox, Safari, and Edge.
+
+=== Conclusion
+
+By meeting these software requirements, users can run the Storytelling Web App on their local machine or on a web server.
