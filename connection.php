@@ -4,7 +4,8 @@
 // $username = 'root';
 // $password = 'tiger';
 
-$servername = "lamp-mysql8";
+// $servername = "lamp-mysql8";
+$servername = "my_docker_sql";
 $dbname = 'folktales'; 
 $username = 'root';
 $password = 'tiger';

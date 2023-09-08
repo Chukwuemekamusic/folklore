@@ -48,7 +48,6 @@ if ($continent_id) {
 </head>
 
 <body>
-    <!-- #TODO ADD THE LEGEND TITLE & NAVBAR -->
     <header>
         <!-- Navigation -->
         <nav class="navbar bg-light navbar-light navbar-expand-lg">

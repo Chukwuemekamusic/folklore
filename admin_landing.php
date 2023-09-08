@@ -104,7 +104,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="col-auto my-1">
                     <select class="custom-select mr-sm-2" name="sortby">
                         <!-- #TODO make the option selected to remain; -->
-                        <!-- #TODO create function that increases view count; -->
                         <option value="author">Sort by Author</option>
                         <option value="category">Sort by Category</option>
                         <option value="earliest">Sort by Earliest</option>

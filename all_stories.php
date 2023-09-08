@@ -129,11 +129,7 @@ if (isset($_SESSION['user_id'])) {
                         <h1 class="text-blue">Our Stories</h1>
                     </div>
                 </div>
-                <!-- <div class="row">
-            <div class="justify-center">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55613426.91722162!2d-146.38331045098784!3d31.70567163459902!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x52b30b71698e729d%3A0x131328839761a382!2sNorth%20America!5e0!3m2!1sen!2suk!4v1679740468036!5m2!1sen!2suk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-        </div> -->
+               
             </div>
         </div>
     </header>

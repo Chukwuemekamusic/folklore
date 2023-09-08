@@ -1,4 +1,5 @@
 <?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 include_once('connection.php');
 $firstname = $_POST['firstName'];
 $lastname = $_POST['lastName'];
@@ -36,5 +37,7 @@ if ($stmt->execute()) {
   header('Location: login.html');
 } else {
   echo "Error: " . $stmt->error;
+}
+
 }
 ?>

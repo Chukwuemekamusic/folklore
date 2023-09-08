@@ -164,8 +164,8 @@ function searchStories($search_query)
     // mysqli_close($conn); 
 }
 
-#TODO work on update views
-function update_story_views($story_id) //only updates views when the viewer is not the author
+
+function update_story_views($story_id) //only updates views when the viewer is not the author and admin
 {
     global $conn;
 

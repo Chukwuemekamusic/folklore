@@ -165,8 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input type="email" class="form-control" name="email" required>
                             </div>
                             <div class="form-group select2">
-                                <!-- <label for="country">Country</label>
-                                <select class="selectpicker countrypicker" data-live-search="true"></select> -->
+                                <!-- country drop down gotten from https://gist.github.com/danrovito/977bcb97c9c2dfd3398a/revisions -->
                                 <label for="country">Country</label><span style="color: red !important; display: inline; float: none;">*</span>      
                                 <select id="country" name="country" class="form-control">
                                     <option value="Afghanistan">Afghanistan</option>
