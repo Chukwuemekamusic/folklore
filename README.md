@@ -16,7 +16,6 @@ Before you begin, make sure you have the following software installed on your sy
 1. Clone this repository to your local machine:
 
    ```bash
-   <!-- git clone https://github.com/your-username/folktales-web-app.git -->
    git clone https://github.com/Chukwuemekamusic/folklore.git
    ```
 
