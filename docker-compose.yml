@@ -12,7 +12,7 @@ services:
   container_name: my_docker_sql
   volumes:
    - ./db_data:/var/lib/mysql
-  #  - ./folktales_backup.sql:/docker-entrypoint-initdb.d/folktales_backup.sql
+   - ./folktales_backup.sql:/docker-entrypoint-initdb.d/folktales_backup.sql
   environment:
    MYSQL_ROOT_PASSWORD: tiger
    MYSQL_DATABASE: folktales
